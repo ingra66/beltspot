@@ -4,12 +4,30 @@ import Header from '@/Pages/Header'
 import Footer from '@/Pages/Footer'
 import { Button } from "@/shadcn/ui/button"
 import { Card, CardContent } from "@/shadcn/ui/card"
+import { motion } from "framer-motion";
+import { Link } from '@inertiajs/react';
+import PageLoader from '@/Components/PageLoader';
 
 export default function Welcome() {
     const products = [
-        { title: "CINTOS", description: "Iconic BB Simon Belts", image: "images/image2.png?height=600&width=400", background: "bg-black" },
-        { title: "CADENAS", description: "BAGS Sling Bags", image: "images/image1.webp?height=600&width=400", background: "bg-gray-100" },
-        { title: "GORROS", description: "BAGS Large Backpacks", image: "images/image1.webp?height=600&width=400", background: "bg-black" }
+        {
+            title: "CINTOS",
+            image: "images/cinturones.webp?height=600&width=400",
+            background: "bg-black",
+            link: "/cinturones"
+        },
+        {
+            title: "CADENAS",
+            image: "images/cadenas.webp?height=600&width=400",
+            background: "bg-black",
+            link: "/cadenas"
+        },
+        {
+            title: "GORROS",
+            image: "images/gorros.jpg?height=600&width=400",
+            background: "bg-black",
+            link: "/gorros"
+        }
     ]
 
     return (
@@ -18,39 +36,65 @@ export default function Welcome() {
 
             {/* Hero Section */}
             <div className="relative h-screen">
-                <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(images/fondo.jpg)` }}>
+                <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(images/fondo.jpg)`, backgroundAttachment: "fixed" }}>
                     <div className="absolute inset-0 bg-black bg-opacity-50" />
                 </div>
                 <div className="relative h-full flex flex-col items-center justify-center text-center px-4 text-white">
-                    <h2 className="text-sm tracking-wider mb-4">LUJO ARTESANAL & DISEÑO GÓTICO</h2>
-                    <h1 className="text-4xl md:text-6xl font-bold max-w-4xl mb-8">
-                        Descubre la Exquisita Artesanía en Cristales Swarovski
-                    </h1>
-                    <Button className="bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-none">
-                        VER COLECCION
-                    </Button>
+                    <motion.h2 
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6 }}
+                        className="text-sm tracking-wider mb-4"
+                    >
+                        LUJO ARTESANAL & DISEÑO GÓTICO
+                    </motion.h2>
+                    <motion.h1 
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6, delay: 0.2 }}
+                        className="text-4xl md:text-6xl font-bold max-w-4xl mb-8"
+                    >
+                        Descubre la Exquisita Artesanía en <strong>Cristales Swarovski</strong>
+                    </motion.h1>
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6, delay: 0.4 }}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                    >
+                        <Button 
+                            className="bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-none"
+                            style={{ transition: "background-color 0.4s, transform 0.2s" }}
+                        >
+                            VER COLECCION
+                        </Button>
+                    </motion.div>
                 </div>
             </div>
 
             {/* Product Showcase */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 px-4 py-16 max-w-7xl mx-auto">
                 {products.map((product, index) => (
-                    <Card key={index} className="group relative overflow-hidden border-0 rounded-none transform transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
-                        <CardContent className={`p-0 relative aspect-[4/5] overflow-hidden ${product.background}`}>
+                    <Link 
+                        key={index} 
+                        href={product.link}
+                        className="block group relative overflow-hidden transform transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl"
+                        preserveState={false}
+                        preserveScroll={false}
+                    >
+                        <div className={`relative aspect-[4/5] overflow-hidden ${product.background}`}>
                             <img
                                 src={product.image}
-                                alt={product.description}
-                                className="w-full h-full object-cover transition-all duration-300 ease-in-out"
+                                alt={product.title}
+                                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                             />
-                            <div className="absolute inset-0 bg-black/40 transition-opacity group-hover:opacity-0" />
-                            <div className={`absolute inset-0 flex flex-col items-center justify-end p-6 ${index === 1 ? 'text-black' : 'text-white'}`}>
-                                <h3 className="text-3xl font-bold mb-2">{product.title}</h3>
-                                <span className="text-sm tracking-wider underline transform translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
-                                    {product.description}
-                                </span>
+                            <div className="absolute inset-0 bg-black/50 transition-opacity duration-300 group-hover:opacity-30" />
+                            <div className="absolute inset-0 flex flex-col items-center justify-end p-8 text-white">
+                                <h3 className="text-3xl font-bold tracking-wider text-white">{product.title}</h3>
                             </div>
-                        </CardContent>
-                    </Card>
+                        </div>
+                    </Link>
                 ))}
             </div>
 
@@ -58,7 +102,7 @@ export default function Welcome() {
             <div className="bg-black text-white py-20">
                 <div className="max-w-4xl mx-auto text-center px-4">
                     <h2 className="text-5xl font-bold mb-8">BELTSPOT</h2>
-                    <p className="text-lg mb-8">
+                    <p className="text-lg mb-8 leading-relaxed text-gray-200">
                         Beltspot es una marca que se especializa en la venta de productos importados a Argentina, 
                         principalmente cintos de cristales Swarovski. Nuestra misión es mostrar lujo y moda moderna 
                         a través de nuestros productos. Además de nuestros icónicos cinturones, ofrecemos una variedad 
@@ -70,38 +114,80 @@ export default function Welcome() {
             {/* Ofertas */}
             <div className="py-20 bg-gray-100">
                 <div className="max-w-7xl mx-auto px-4">
-                    <h2 className="text-4xl font-bold text-center mb-12">OFERTAS</h2>
+                    <motion.h2 
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6 }}
+                        className="text-4xl font-bold text-center mb-12"
+                    >
+                        OFERTAS
+                    </motion.h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                         {[
-                            { discount: 20, image: 'images/belt-display.webp?height=400&width=300' },
-                            { discount: 30, image: '/placeholder.svg?height=400&width=300' },
-                            { discount: 15, image: '/placeholder.svg?height=400&width=300' },
-                            { discount: 25, image: '/placeholder.svg?height=400&width=300' },
+                            { discount: 15, image: 'images/cinto1.jpg?height=400&width=300' },
+                            { discount: 15, image: 'images/cinto2.jpg?height=400&width=300' },
+                            { discount: 15, image: 'images/cinto3.jpg?height=400&width=300' },
+                            { discount: 15, image: 'images/cinto4.jpg?height=400&width=300' },
                         ].map((item, index) => (
-                            <div key={index} className="group relative overflow-hidden">
-                                <img 
-                                    src={item.image}
-                                    alt={`Oferta ${index + 1}`}
-                                    className="w-full h-[400px] object-cover transition-transform duration-300 group-hover:scale-110"
-                                />
-                                <div className="absolute top-0 right-0 bg-red-600 text-white px-3 py-1 text-sm font-bold">
-                                    {item.discount}% OFF
-                                </div>
-                                <div className="absolute inset-x-0 bottom-0 h-full bg-black/10 flex items-end justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
-                                    <button 
-                                        onClick={() => {/* Aquí tu lógica para ver detalles */}}
-                                        className="w-full h-0 group-hover:h-full bg-gray-200/40 backdrop-blur-[2px] transition-all duration-300 flex items-center justify-center cursor-pointer hover:bg-gray-200/50"
+                            <motion.div 
+                                key={index} 
+                                className="group relative"
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.6, delay: index * 0.1 }}
+                            >
+                                <div className="relative overflow-hidden">
+                                    <img 
+                                        src={item.image}
+                                        alt={`Oferta ${index + 1}`}
+                                        className="w-full h-[400px] object-cover transition-transform duration-300 group-hover:scale-110"
+                                    />
+                                    
+                                    <div 
+                                        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10 pointer-events-none"
+                                        style={{
+                                            background: `radial-gradient(circle, rgba(255,255,255,0.1) 20%, transparent 70%)`,
+                                            animation: 'flicker 2s infinite ease-in-out'
+                                        }}
+                                    />
+                                    
+                                    <div 
+                                        className="absolute -right-2 top-4 bg-red-600 text-white px-4 py-2 text-sm font-bold z-20"
+                                        style={{
+                                            clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%, 10% 50%)'
+                                        }}
                                     >
-                                        <span className="text-BLACK font-bold">MOSTRAR MAS OPCIONES</span>
-                                    </button>
+                                        15% OFF
+                                    </div>
+
+                                    <div className="absolute inset-x-0 bottom-0 h-[80px] opacity-0 group-hover:opacity-100 transition-all duration-300">
+                                        <button 
+                                            className="w-full h-full bg-gray-200/90 text-gray-800 font-medium hover:bg-gray-300/90 transition-all duration-300"
+                                        >
+                                            MOSTRAR MAS OPCIONES
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
+                            </motion.div>
                         ))}
                     </div>
                 </div>
             </div>
 
             <Footer />
+
+            <style jsx>{`
+                @keyframes flicker {
+                    0%, 100% {
+                        opacity: 1;
+                    }
+                    50% {
+                        opacity: 0.7;
+                    }
+                }
+            `}</style>
         </div>
     )
 }

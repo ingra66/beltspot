@@ -1,13 +1,12 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { X } from 'lucide-react'
+import { X, Plus } from 'lucide-react'
 import Header from '@/Pages/Header'
 import Footer from '@/Pages/Footer'
 import { Button } from "@/shadcn/ui/button"
-import AOS from 'aos'
-import 'aos/dist/aos.css'
 import TypeIt from "typeit"
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface Belt {
     title: string
@@ -27,25 +26,13 @@ export default function Cinturones() {
     const sizes = [90, 95, 100, 105, 110, 115];
 
     useEffect(() => {
-        let timer;
         if (isModalOpen) {
-            timer = setTimeout(() => {
-                setShowContent(true);
-            }, 500);
+            setShowContent(true);
         }
         return () => {
-            clearTimeout(timer);
             setShowContent(false);
         };
     }, [isModalOpen]);
-
-    // Inicializar AOS
-    useEffect(() => {
-        AOS.init({
-            duration: 800,
-            once: true,
-        });
-    }, []);
 
     // Efecto para iniciar TypeIt cuando el modal se abre
     useEffect(() => {
@@ -71,6 +58,10 @@ export default function Cinturones() {
             }).go();
         }
     }, [isModalOpen, selectedBelt]);
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
 
     const belts = [
         {
@@ -121,10 +112,7 @@ export default function Cinturones() {
     };
 
     const handleCloseModal = () => {
-        setShowContent(false);
-        setTimeout(() => {
-            setIsModalOpen(false);
-        }, 300);
+        setIsModalOpen(false);
     };
 
     return (
@@ -182,79 +170,115 @@ export default function Cinturones() {
                 </div>
             </section>
 
-            {/* Modal con animación AOS */}
-            {isModalOpen && selectedBelt && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center">
-                    <div className="absolute inset-0 bg-black/50" onClick={handleCloseModal} />
-                    <div 
-                        data-aos="fade-up"
-                        data-aos-anchor-placement="top-bottom"
-                        className="relative w-full max-w-5xl bg-white"
-                        onClick={e => e.stopPropagation()}
+            {/* Modal con animaciones disparejas invertidas */}
+            <AnimatePresence>
+                {isModalOpen && selectedBelt && (
+                    <motion.div 
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-50 flex items-center justify-center"
                     >
-                        <button 
-                            onClick={handleCloseModal}
-                            className="absolute right-4 top-4 z-10 p-2"
+                        <div className="absolute inset-0 bg-black/50" onClick={handleCloseModal} />
+                        <motion.div 
+                            initial={{ scale: 0.9, y: "-100%" }}
+                            animate={{ scale: 1, y: 0 }}
+                            exit={{ scale: 0.9, y: "-100%" }}
+                            transition={{ type: "spring", duration: 0.6 }}
+                            className="relative w-full max-w-5xl overflow-hidden flex"
+                            onClick={e => e.stopPropagation()}
                         >
-                            <X size={24} />
-                        </button>
-
-                        <div className="flex">
-                            {/* Image Side */}
-                            <div className="w-1/2">
-                                <img
+                            {/* Image Side - Aparece después */}
+                            <motion.div 
+                                initial={{ height: "auto", y: "100%" }}
+                                animate={{ height: "auto", y: 0 }}
+                                transition={{ duration: 0.5, ease: "easeOut", delay: 0.2 }}  // Delay para el contenedor
+                                className="w-1/2 bg-gray-200"
+                            >
+                                <motion.img
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    transition={{ delay: 1 }}  // Delay más largo para la imagen
                                     src={selectedBelt.image}
                                     alt={selectedBelt.title}
                                     className="w-full h-full object-cover"
                                 />
-                            </div>
+                            </motion.div>
 
-                            {/* Content Side con TypeIt */}
-                            <div className="w-1/2 p-12">
-                                <div>
-                                    <h3 className="text-xs text-gray-500 mb-2">BB SIMON</h3>
-                                    <h2 id="beltTitle" className="text-2xl font-medium mb-4">
-                                        {selectedBelt.title}
-                                    </h2>
-                                    <p id="beltPrice" className="text-lg">
-                                        {selectedBelt.price}
-                                    </p>
-                                    <p id="beltDescription" className="text-sm text-gray-500 mt-1">
-                                        {selectedBelt.description}
-                                    </p>
-                                </div>
-
-                                <div className="mt-8">
-                                    <h3 className="text-sm font-medium mb-4">TAMAÑO DEL CINTURÓN</h3>
-                                    <div className="grid grid-cols-4 gap-2">
-                                        {sizes.map((size) => (
-                                            <button
-                                                key={size}
-                                                onClick={() => setSelectedSize(size)}
-                                                className={`py-3 text-sm border ${
-                                                    selectedSize === size 
-                                                    ? 'border-black bg-black text-white' 
-                                                    : 'border-gray-200 hover:border-black'
-                                                }`}
-                                            >
-                                                {size}cm
-                                            </button>
-                                        ))}
+                            {/* Content Side - Aparece primero */}
+                            <motion.div 
+                                initial={{ height: "auto", y: "100%" }}
+                                animate={{ height: "auto", y: 0 }}
+                                transition={{ duration: 0.5, ease: "easeOut" }}  // Sin delay inicial
+                                className="w-1/2 p-12 bg-white"
+                            >
+                                <motion.div
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    transition={{ delay: 0.6 }}  // Delay más corto para el contenido
+                                >
+                                    <div>
+                                        <h3 className="text-xs text-gray-500 mb-2">BB SIMON</h3>
+                                        <h2 id="beltTitle" className="text-2xl font-medium mb-4">
+                                            {selectedBelt.title}
+                                        </h2>
+                                        <p id="beltPrice" className="text-lg">
+                                            {selectedBelt.price}
+                                        </p>
+                                        <p id="beltDescription" className="text-sm text-gray-500 mt-1">
+                                            {selectedBelt.description}
+                                        </p>
                                     </div>
-                                </div>
 
-                                <div className="mt-8">
-                                    <Button 
-                                        className="w-full h-12 bg-sky-500 hover:bg-sky-600 text-white rounded-none"
-                                    >
-                                        Pagar con Mercado Pago
-                                    </Button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
+                                    <div className="mt-8">
+                                        <h3 className="text-sm font-medium mb-4">TAMAÑO DEL CINTURÓN</h3>
+                                        <div className="grid grid-cols-4 gap-2">
+                                            {sizes.map((size) => (
+                                                <motion.button
+                                                    key={size}
+                                                    whileHover={{ scale: 1.05 }}
+                                                    whileTap={{ scale: 0.95 }}
+                                                    onClick={() => setSelectedSize(size)}
+                                                    className={`py-3 text-sm border ${
+                                                        selectedSize === size 
+                                                        ? 'border-black bg-black text-white' 
+                                                        : 'border-gray-200 hover:border-black'
+                                                    }`}
+                                                >
+                                                    {size}cm
+                                                </motion.button>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    <div className="mt-8">
+                                        <motion.div
+                                            whileHover={{ scale: 1.02 }}
+                                            whileTap={{ scale: 0.98 }}
+                                        >
+                                            <Button 
+                                                className="w-full h-12 bg-sky-500 hover:bg-sky-600 text-white rounded-none"
+                                            >
+                                                Pagar con Mercado Pago
+                                            </Button>
+                                        </motion.div>
+                                    </div>
+                                </motion.div>
+                            </motion.div>
+
+                            {/* Botón de cierre con animación */}
+                            <motion.button 
+                                onClick={handleCloseModal}
+                                className="absolute right-4 top-4 z-10 p-2 hover:bg-gray-100 rounded-full transition-colors"
+                                whileHover={{ rotate: 45 }}  // Esto hará que la X gire 45 grados y parezca un +
+                                transition={{ duration: 0.2 }}
+                            >
+                                <X size={24} className="text-gray-600" />
+                            </motion.button>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             <Footer />
         </div>

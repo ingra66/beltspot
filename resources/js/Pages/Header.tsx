@@ -11,7 +11,7 @@ const navigationLinks = [
     { name: 'CINTURONES', href: '/cinturones' },
     { name: 'CADENAS', href: '/cadenas' },
     { name: 'GORROS', href: '/gorros' },
-    { name: 'ACCESORIOS', href: '/accesorios' }
+    { name: 'OTROS', href: '/otros' }
 ]
 
 export default function Header() {
