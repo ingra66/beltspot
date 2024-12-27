@@ -1,15 +1,30 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { X } from 'lucide-react'
 import Header from '@/Pages/Header'
 import Footer from '@/Pages/Footer'
 import { Button } from "@/shadcn/ui/button"
-import { X } from 'lucide-react'
+import AOS from 'aos'
+import 'aos/dist/aos.css'
+import TypeIt from "typeit"
+
+interface Belt {
+    title: string
+    price: string
+    description: string
+    image: string
+    category: string
+    size: string
+}
 
 export default function Cinturones() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [showContent, setShowContent] = useState(false);
-    const [selectedBelt, setSelectedBelt] = useState(null);
+    const [selectedBelt, setSelectedBelt] = useState<Belt | null>(null);
+    const [selectedSize, setSelectedSize] = useState<number | null>(null);
+
+    const sizes = [90, 95, 100, 105, 110, 115];
 
     useEffect(() => {
         let timer;
@@ -24,6 +39,39 @@ export default function Cinturones() {
         };
     }, [isModalOpen]);
 
+    // Inicializar AOS
+    useEffect(() => {
+        AOS.init({
+            duration: 800,
+            once: true,
+        });
+    }, []);
+
+    // Efecto para iniciar TypeIt cuando el modal se abre
+    useEffect(() => {
+        if (isModalOpen && selectedBelt) {
+            new TypeIt("#beltTitle", {
+                speed: 50,
+                waitUntilVisible: true,
+                cursor: false,
+            }).go();
+
+            new TypeIt("#beltPrice", {
+                speed: 50,
+                waitUntilVisible: true,
+                startDelay: 500,
+                cursor: false,
+            }).go();
+
+            new TypeIt("#beltDescription", {
+                speed: 50,
+                waitUntilVisible: true,
+                startDelay: 1000,
+                cursor: false,
+            }).go();
+        }
+    }, [isModalOpen, selectedBelt]);
+
     const belts = [
         {
             title: "BB Simon Crystal",
@@ -34,22 +82,37 @@ export default function Cinturones() {
             size: "100cm"
         },
         {
-            title: "Gothic Dark",
-            price: "$259.99",
-            description: "Diseño gótico exclusivo",
-            image: "/images/belt2.jpg",
-            category: "Colección Dark",
+            title: "BB Simon Black Diamond",
+            price: "$279.99",
+            description: "Cinturón negro con cristales",
+            image: "/images/image1.webp",
+            category: "Premium",
             size: "95cm"
         },
         {
-            title: "Royal Crown",
-            price: "$329.99",
-            description: "Edición limitada corona",
-            image: "/images/belt3.jpg",
+            title: "BB Simon Gold Edition",
+            price: "$349.99",
+            description: "Edición dorada limitada",
+            image: "/images/image1.webp",
             category: "Limitada",
             size: "105cm"
         },
-        // Puedes agregar más cinturones aquí
+        {
+            title: "BB Simon Silver Ice",
+            price: "$289.99",
+            description: "Diseño plateado exclusivo",
+            image: "/images/image1.webp",
+            category: "Premium",
+            size: "100cm"
+        },
+        {
+            title: "BB Simon Royal Blue",
+            price: "$319.99",
+            description: "Cristales en tonos azules",
+            image: "/images/image1.webp",
+            category: "Premium",
+            size: "95cm"
+        }
     ];
 
     const handleOpenModal = (belt) => {
@@ -119,92 +182,79 @@ export default function Cinturones() {
                 </div>
             </section>
 
-            {/* Modal con un solo botón */}
-            {isModalOpen && (
-                <div 
-                    className="fixed inset-0 z-50 flex items-end sm:items-center justify-center"
-                    onClick={handleCloseModal}
-                >
-                    <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
+            {/* Modal con animación AOS */}
+            {isModalOpen && selectedBelt && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center">
+                    <div className="absolute inset-0 bg-black/50" onClick={handleCloseModal} />
                     <div 
-                        className="relative w-full max-w-4xl bg-white overflow-hidden"
-                        style={{
-                            height: '90vh',
-                            animation: 'expandUp 500ms cubic-bezier(0.34, 1.56, 0.64, 1)',
-                            transformOrigin: 'bottom'
-                        }}
+                        data-aos="fade-up"
+                        data-aos-anchor-placement="top-bottom"
+                        className="relative w-full max-w-5xl bg-white"
                         onClick={e => e.stopPropagation()}
                     >
-                        {/* Botón X para cerrar */}
                         <button 
                             onClick={handleCloseModal}
-                            className="absolute right-4 top-4 z-10 p-2 hover:bg-gray-100"
+                            className="absolute right-4 top-4 z-10 p-2"
                         >
-                            <X size={24} className="text-gray-600" />
+                            <X size={24} />
                         </button>
 
-                        <div 
-                            className={`h-full transition-opacity duration-300 ${
-                                showContent ? 'opacity-100' : 'opacity-0'
-                            }`}
-                        >
-                            <div className="flex h-full flex-col md:flex-row">
-                                {/* Image Side */}
-                                <div className="w-full md:w-1/2 h-1/2 md:h-full">
-                                    <img
-                                        src={selectedBelt?.image}
-                                        alt={selectedBelt?.title}
-                                        className="w-full h-full object-cover"
-                                    />
+                        <div className="flex">
+                            {/* Image Side */}
+                            <div className="w-1/2">
+                                <img
+                                    src={selectedBelt.image}
+                                    alt={selectedBelt.title}
+                                    className="w-full h-full object-cover"
+                                />
+                            </div>
+
+                            {/* Content Side con TypeIt */}
+                            <div className="w-1/2 p-12">
+                                <div>
+                                    <h3 className="text-xs text-gray-500 mb-2">BB SIMON</h3>
+                                    <h2 id="beltTitle" className="text-2xl font-medium mb-4">
+                                        {selectedBelt.title}
+                                    </h2>
+                                    <p id="beltPrice" className="text-lg">
+                                        {selectedBelt.price}
+                                    </p>
+                                    <p id="beltDescription" className="text-sm text-gray-500 mt-1">
+                                        {selectedBelt.description}
+                                    </p>
                                 </div>
 
-                                {/* Content Side */}
-                                <div className="w-full md:w-1/2 p-6 md:p-8 flex flex-col justify-between">
-                                    <div className="space-y-6">
-                                        <div>
-                                            <h2 className="text-2xl font-bold mb-2">
-                                                {selectedBelt?.title}
-                                            </h2>
-                                            <p className="text-xl text-gray-900">
-                                                {selectedBelt?.price}
-                                            </p>
-                                        </div>
-                                        
-                                        <div className="space-y-4">
-                                            <p className="text-gray-600">
-                                                {selectedBelt?.description}
-                                            </p>
-                                            <div className="text-sm text-gray-500">
-                                                <span>Tamaño: {selectedBelt?.size}</span>
-                                            </div>
-                                        </div>
+                                <div className="mt-8">
+                                    <h3 className="text-sm font-medium mb-4">TAMAÑO DEL CINTURÓN</h3>
+                                    <div className="grid grid-cols-4 gap-2">
+                                        {sizes.map((size) => (
+                                            <button
+                                                key={size}
+                                                onClick={() => setSelectedSize(size)}
+                                                className={`py-3 text-sm border ${
+                                                    selectedSize === size 
+                                                    ? 'border-black bg-black text-white' 
+                                                    : 'border-gray-200 hover:border-black'
+                                                }`}
+                                            >
+                                                {size}cm
+                                            </button>
+                                        ))}
                                     </div>
+                                </div>
 
-                                    <div>
-                                        {/* Solo botón de Mercado Pago */}
-                                        <Button 
-                                            className="w-full h-12 bg-sky-500 hover:bg-sky-600 text-white text-base font-medium rounded-none" 
-                                        >
-                                            Pagar con Mercado Pago
-                                        </Button>
-                                    </div>
+                                <div className="mt-8">
+                                    <Button 
+                                        className="w-full h-12 bg-sky-500 hover:bg-sky-600 text-white rounded-none"
+                                    >
+                                        Pagar con Mercado Pago
+                                    </Button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             )}
-
-            <style jsx global>{`
-                @keyframes expandUp {
-                    0% {
-                        transform: translateY(100%) scaleY(0.1);
-                    }
-                    100% {
-                        transform: translateY(0) scaleY(1);
-                    }
-                }
-            `}</style>
 
             <Footer />
         </div>

@@ -4,6 +4,9 @@ import '../css/app.css';
 import { createRoot } from 'react-dom/client';
 import { createInertiaApp } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+import { useEffect } from 'react';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -19,3 +22,15 @@ createInertiaApp({
         color: '#4B5563',
     },
 });
+
+// Inicializa AOS
+useEffect(() => {
+    AOS.init({
+        duration: 1000,
+        once: true,
+        easing: 'ease-in-out',
+        delay: 0,
+        offset: 120,
+        anchorPlacement: 'top-bottom',
+    });
+}, []);
