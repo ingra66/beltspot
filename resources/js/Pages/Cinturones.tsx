@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react'
 import Header from '@/Pages/Header'
 import Footer from '@/Pages/Footer'
 import ProductModal from '@/Components/ProductModal'
-import { motion } from 'framer-motion';
+import { motion } from 'framer-motion'
+import { Head } from '@inertiajs/react'
 
 interface Belt {
     title: string;
@@ -77,8 +78,9 @@ export default function Cinturones() {
 
     return (
         <div className="min-h-screen bg-white">
+            <Head title="Cinturones - BeltSpot" />
             <Header />
-            
+
             {/* Hero Section */}
             <section className="relative h-[60vh]">
                 <div 
@@ -102,7 +104,13 @@ export default function Cinturones() {
             <section className="max-w-7xl mx-auto px-4 py-16">
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
                     {belts.map((belt, index) => (
-                        <article key={index} className="space-y-3">
+                        <motion.article 
+                            key={index} 
+                            className="space-y-3"
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5, delay: index * 0.1 }}
+                        >
                             <div className="group relative overflow-hidden">
                                 <img
                                     src={belt.image}
@@ -125,7 +133,7 @@ export default function Cinturones() {
                                 <h3 className="text-lg font-medium">{belt.title}</h3>
                                 <p className="text-gray-600">{belt.price}</p>
                             </div>
-                        </article>
+                        </motion.article>
                     ))}
                 </div>
             </section>

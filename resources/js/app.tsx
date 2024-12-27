@@ -4,28 +4,45 @@ import '../css/app.css';
 import { createRoot } from 'react-dom/client';
 import { createInertiaApp } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
-import { AnimatePresence } from 'framer-motion';
-import PageLoader from './Components/PageLoader';
+import { router } from '@inertiajs/react';
+import PageLoader from '@/Components/PageLoader';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
 createInertiaApp({
-    title: (title) => `${title} - My App`,
+    title: (title) => `${title} - ${appName}`,
     resolve: (name) => resolvePageComponent(`./Pages/${name}.tsx`, import.meta.glob('./Pages/**/*.tsx')),
     setup({ el, App, props }) {
         const root = createRoot(el);
-
-        const app = (
-            <AnimatePresence mode="wait">
-                <PageLoader key="loader" />
-                <App {...props} />
-            </AnimatePresence>
-        );
-
-        root.render(app);
+        root.render(<App {...props} />);
     },
-    progress: {
-        color: '#4B5563',
-        showSpinner: false,
-    },
+});
+
+// Elemento para el loader
+const loaderElement = document.createElement('div');
+loaderElement.id = 'page-loader';
+document.body.appendChild(loaderElement);
+
+const showLoader = () => {
+    const loader = document.getElementById('page-loader');
+    if (loader) {
+        const root = createRoot(loader);
+        root.render(<PageLoader />);
+    }
+};
+
+const hideLoader = () => {
+    const loader = document.getElementById('page-loader');
+    if (loader) {
+        loader.innerHTML = '';
+    }
+};
+
+// Eventos del router
+router.on('start', () => {
+    showLoader();
+});
+
+router.on('finish', () => {
+    hideLoader();
 });
