@@ -7,8 +7,13 @@ import { Card, CardContent } from "@/shadcn/ui/card"
 import { motion } from "framer-motion";
 import { Link } from '@inertiajs/react';
 import PageLoader from '@/Components/PageLoader';
+import ProductModal from '@/Components/ProductModal';
+import { useState } from 'react';
 
 export default function Welcome() {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedProduct, setSelectedProduct] = useState(null);
+
     const products = [
         {
             title: "CINTOS",
@@ -29,6 +34,46 @@ export default function Welcome() {
             link: "/gorros"
         }
     ]
+
+    const offerProducts = [
+        {
+            title: "Cinto Premium BB Simon",
+            price: "$259.99",
+            description: "Cinturón con cristales Swarovski, edición limitada con 15% de descuento",
+            image: "images/cinto1.jpg",
+            category: "Oferta Especial",
+            size: "100cm"
+        },
+        {
+            title: "Cinto Elegance BB Simon",
+            price: "$279.99",
+            description: "Diseño exclusivo con cristales premium, ahorra 15% en tu compra",
+            image: "images/cinto2.jpg",
+            category: "Oferta Especial",
+            size: "100cm"
+        },
+        {
+            title: "Cinto Classic BB Simon",
+            price: "$239.99",
+            description: "Modelo clásico con detalles brillantes, 15% off en tiempo limitado",
+            image: "images/cinto3.jpg",
+            category: "Oferta Especial",
+            size: "100cm"
+        },
+        {
+            title: "Cinto Luxury BB Simon",
+            price: "$299.99",
+            description: "Edición especial con acabados premium, aprovecha 15% de descuento",
+            image: "images/cinto4.jpg",
+            category: "Oferta Especial",
+            size: "100cm"
+        }
+    ];
+
+    const handleOpenModal = (product) => {
+        setSelectedProduct(product);
+        setIsModalOpen(true);
+    };
 
     return (
         <div className="min-h-screen bg-white text-black">
@@ -124,12 +169,7 @@ export default function Welcome() {
                         OFERTAS
                     </motion.h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                        {[
-                            { discount: 15, image: 'images/cinto1.jpg?height=400&width=300' },
-                            { discount: 15, image: 'images/cinto2.jpg?height=400&width=300' },
-                            { discount: 15, image: 'images/cinto3.jpg?height=400&width=300' },
-                            { discount: 15, image: 'images/cinto4.jpg?height=400&width=300' },
-                        ].map((item, index) => (
+                        {offerProducts.map((item, index) => (
                             <motion.div 
                                 key={index} 
                                 className="group relative"
@@ -141,15 +181,20 @@ export default function Welcome() {
                                 <div className="relative overflow-hidden">
                                     <img 
                                         src={item.image}
-                                        alt={`Oferta ${index + 1}`}
+                                        alt={item.title}
                                         className="w-full h-[400px] object-cover transition-transform duration-300 group-hover:scale-110"
                                     />
                                     
                                     <div 
                                         className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10 pointer-events-none"
                                         style={{
-                                            background: `radial-gradient(circle, rgba(255,255,255,0.1) 20%, transparent 70%)`,
-                                            animation: 'flicker 2s infinite ease-in-out'
+                                            background: `
+                                                radial-gradient(circle at 20% 20%, rgba(255,255,255,0.9) 0%, transparent 6%) 50% 50% / 4.5% 4.5%,
+                                                radial-gradient(circle at 80% 80%, rgba(255,255,255,0.9) 0%, transparent 6%) 50% 50% / 4.5% 4.5%,
+                                                radial-gradient(circle at 40% 40%, rgba(255,255,255,0.9) 0%, transparent 6%) 30% 30% / 4.5% 4.5%,
+                                                radial-gradient(circle at 60% 60%, rgba(255,255,255,0.9) 0%, transparent 6%) 70% 70% / 4.5% 4.5%
+                                            `,
+                                            animation: 'sparklePoints 2s ease-in-out infinite'
                                         }}
                                     />
                                     
@@ -164,6 +209,7 @@ export default function Welcome() {
 
                                     <div className="absolute inset-x-0 bottom-0 h-[80px] opacity-0 group-hover:opacity-100 transition-all duration-300">
                                         <button 
+                                            onClick={() => handleOpenModal(item)}
                                             className="w-full h-full bg-gray-200/90 text-gray-800 font-medium hover:bg-gray-300/90 transition-all duration-300"
                                         >
                                             MOSTRAR MAS OPCIONES
@@ -175,6 +221,13 @@ export default function Welcome() {
                     </div>
                 </div>
             </div>
+
+            {/* Modal Component */}
+            <ProductModal 
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                product={selectedProduct}
+            />
 
             <Footer />
 
