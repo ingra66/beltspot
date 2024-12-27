@@ -144,7 +144,7 @@ export default function Welcome() {
             </div>
 
             {/* Brand Description */}
-            <div className="bg-black text-white py-20">
+            <div className="bg-black text-white py-20" id="brand-description">
                 <div className="max-w-4xl mx-auto text-center px-4">
                     <h2 className="text-5xl font-bold mb-8">BELTSPOT</h2>
                     <p className="text-lg mb-8 leading-relaxed text-gray-200">

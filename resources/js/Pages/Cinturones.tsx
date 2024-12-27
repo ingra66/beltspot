@@ -26,7 +26,7 @@ export default function Cinturones() {
     const belts = [
         {
             title: "BB Simon Crystal",
-            price: "$299.99",
+            price: "75.000 ARS",
             description: "Cinturón con cristales Swarovski",
             image: "/images/image1.webp",
             category: "Premium",
