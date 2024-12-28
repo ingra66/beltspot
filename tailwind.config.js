@@ -86,6 +86,6 @@ export default {
         }
     },
 
+    // Corregido: solo una declaración de plugins
     plugins: [forms, require("tailwindcss-animate")],
-    plugins: [require('@tailwindcss/forms'), require("tailwindcss-animate")],
 };
