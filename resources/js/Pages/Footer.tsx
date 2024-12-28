@@ -10,8 +10,8 @@ export default function Footer() {
                 <div>
                     <h3 className="text-sm font-medium mb-4">SHOP</h3>
                     <ul className="space-y-3">
-                        <li><Link href="/" className="hover:underline text-sm">INICIO</Link></li>
-                        <li><Link href="/#brand-description" className="hover:underline text-sm">SOBRE NOSOTROS</Link></li>
+                        <li><Link href="/inicio" className="hover:underline text-sm">INICIO</Link></li>
+                        <li><Link href="/sobre-nosotros" className="hover:underline text-sm">SOBRE NOSOTROS</Link></li>
                         <li><Link href="/cinturones" className="hover:underline text-sm">CINTURONES</Link></li>
                         <li><Link href="/cadenas" className="hover:underline text-sm">CADENAS</Link></li>
                         <li><Link href="/gorros" className="hover:underline text-sm">GORROS</Link></li>
@@ -34,10 +34,8 @@ export default function Footer() {
                 <div>
                     <h3 className="text-sm font-medium mb-4">MÁS</h3>
                     <ul className="space-y-3">
-                        <li><Link href="/profile" className="hover:underline text-sm">Mi Cuenta</Link></li>
-                        <li><Link href="/cart" className="hover:underline text-sm">Carrito</Link></li>
-                        <li><Link href="/wishlist" className="hover:underline text-sm">Lista de Deseos</Link></li>
-                        <li><Link href="/orders" className="hover:underline text-sm">Mis Pedidos</Link></li>
+                        <li><Link href="/buscar" className="hover:underline text-sm">Buscar</Link></li>
+                        <li><Link href="/sobre-nosotros" className="hover:underline text-sm">Sobre Beltspot</Link></li>
                     </ul>
                 </div>
 
@@ -49,55 +47,28 @@ export default function Footer() {
                             <input
                                 type="email"
                                 placeholder="Ingresa tu email aquí"
-                                className="flex-1 px-3 py-2 bg-transparent border border-gray-700 text-white placeholder-gray-400 focus:outline-none focus:border-gray-500"
+                                className="flex-1 px-3 py-2 bg-transparent text-white placeholder-gray-400 focus:outline-none"
                             />
-                            <button className="ml-2 px-4 py-2 bg-white text-black hover:bg-gray-200 transition-colors">
-                                →
-                            </button>
+                            <button className="ml-2 px-4">→</button>
                         </div>
-                        <p className="text-sm text-gray-400">
-                            Solicita tu membresía gratuita para recibir ofertas exclusivas, noticias y eventos.
-                        </p>
-                        <div className="flex items-center space-x-4 mt-4">
+                        <p className="text-sm">Solicita tu membresía gratuita para recibir ofertas exclusivas, noticias y eventos.</p>
+                        <div className="flex space-x-4 mt-4">
                             <Link 
-                                href="https://facebook.com" 
-                                target="_blank"
-                                className="p-2 hover:bg-red-600/90 transition-colors duration-300"
+                                href="#" 
+                                className="text-white hover:bg-red-600 p-2 transition-colors duration-300"
                             >
                                 <Facebook className="w-6 h-6" />
                             </Link>
                             <Link 
-                                href="https://instagram.com" 
-                                target="_blank"
-                                className="p-2 hover:bg-red-600/90 transition-colors duration-300"
+                                href="#" 
+                                className="text-white hover:bg-red-600 p-2 transition-colors duration-300"
                             >
                                 <Instagram className="w-6 h-6" />
-                            </Link>
-                            <Link href="/" className="ml-4">
-                                <img 
-                                    src="/images/logo.png" 
-                                    alt="Beltspot Logo" 
-                                    className="h-12 w-auto animate-spin-slow"
-                                />
                             </Link>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <style jsx>{`
-                @keyframes spin-slow {
-                    from {
-                        transform: rotate(0deg);
-                    }
-                    to {
-                        transform: rotate(360deg);
-                    }
-                }
-                .animate-spin-slow {
-                    animation: spin-slow 8s linear infinite;
-                }
-            `}</style>
         </footer>
     )
 }

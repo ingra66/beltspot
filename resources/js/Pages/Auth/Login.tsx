@@ -1,92 +1,97 @@
-import { useEffect } from 'react';
-import { Head, useForm, Link } from '@inertiajs/react';
-import Header from '@/Pages/Header';
-import Footer from '@/Pages/Footer';
+import { useEffect, FormEventHandler } from 'react';
+import Checkbox from '@/Components/Checkbox';
+import GuestLayout from '@/Layouts/GuestLayout';
+import InputError from '@/Components/InputError';
+import InputLabel from '@/Components/InputLabel';
+import PrimaryButton from '@/Components/PrimaryButton';
+import TextInput from '@/Components/TextInput';
+import { Head, Link, useForm } from '@inertiajs/react';
 
-export default function Login() {
-    const { data, setData, post, processing, errors } = useForm({
+export default function Login({ status, canResetPassword }: { status?: string, canResetPassword: boolean }) {
+    const { data, setData, post, processing, errors, reset } = useForm({
         email: '',
         password: '',
+        remember: false,
     });
 
-    const submit = (e: React.FormEvent) => {
+    useEffect(() => {
+        return () => {
+            reset('password');
+        };
+    }, []);
+
+    const submit: FormEventHandler = (e) => {
         e.preventDefault();
+
         post(route('login'));
     };
 
     return (
-        <div className="min-h-screen flex flex-col">
-            <Head title="Login" />
-            <Header />
-            
-            <main className="flex-grow flex items-center justify-center bg-white px-4 sm:px-6 lg:px-8" style={{ marginTop: '100px' }}>
-                <div className="max-w-md w-full space-y-8 py-12">
-                    <div>
-                        <h1 className="text-3xl font-bold">
-                            Login
-                        </h1>
-                        <p className="mt-2 text-gray-600">
-                            ¿No tienes una cuenta? {' '}
-                            <Link href={route('register')} className="text-black hover:underline">
-                                Crear cuenta
-                            </Link>
-                        </p>
-                    </div>
+        <GuestLayout>
+            <Head title="Log in" />
 
-                    <form className="mt-8 space-y-6" onSubmit={submit}>
-                        <div className="space-y-4">
-                            <div>
-                                <input
-                                    type="email"
-                                    value={data.email}
-                                    onChange={e => setData('email', e.target.value)}
-                                    placeholder="Correo electrónico"
-                                    className="w-full px-3 py-3 border border-gray-300 focus:outline-none focus:border-black"
-                                />
-                                {errors.email && <div className="text-red-500 text-sm mt-1">{errors.email}</div>}
-                            </div>
+            {status && <div className="mb-4 font-medium text-sm text-green-600">{status}</div>}
 
-                            <div>
-                                <input
-                                    type="password"
-                                    value={data.password}
-                                    onChange={e => setData('password', e.target.value)}
-                                    placeholder="Contraseña"
-                                    className="w-full px-3 py-3 border border-gray-300 focus:outline-none focus:border-black"
-                                />
-                                {errors.password && <div className="text-red-500 text-sm mt-1">{errors.password}</div>}
-                            </div>
+            <form onSubmit={submit}>
+                <div>
+                    <InputLabel htmlFor="email" value="Email" />
 
-                            <div>
-                                <Link
-                                    href={route('password.request')}
-                                    className="text-sm text-gray-600 hover:underline"
-                                >
-                                    ¿Olvidaste tu contraseña?
-                                </Link>
-                            </div>
+                    <TextInput
+                        id="email"
+                        type="email"
+                        name="email"
+                        value={data.email}
+                        className="mt-1 block w-full"
+                        autoComplete="username"
+                        isFocused={true}
+                        onChange={(e) => setData('email', e.target.value)}
+                    />
 
-                            <div className="flex items-center justify-between">
-                                <button
-                                    type="submit"
-                                    disabled={processing}
-                                    className="w-32 bg-black text-white py-3 hover:bg-gray-800 transition-colors"
-                                >
-                                    INICIAR SESIÓN
-                                </button>
-
-                                <Link
-                                    href="/"
-                                    className="text-black hover:underline"
-                                >
-                                    Volver a la tienda
-                                </Link>
-                            </div>
-                        </div>
-                    </form>
+                    <InputError message={errors.email} className="mt-2" />
                 </div>
-            </main>
-            <Footer />
-        </div>
+
+                <div className="mt-4">
+                    <InputLabel htmlFor="password" value="Password" />
+
+                    <TextInput
+                        id="password"
+                        type="password"
+                        name="password"
+                        value={data.password}
+                        className="mt-1 block w-full"
+                        autoComplete="current-password"
+                        onChange={(e) => setData('password', e.target.value)}
+                    />
+
+                    <InputError message={errors.password} className="mt-2" />
+                </div>
+
+                <div className="block mt-4">
+                    <label className="flex items-center">
+                        <Checkbox
+                            name="remember"
+                            checked={data.remember}
+                            onChange={(e) => setData('remember', e.target.checked)}
+                        />
+                        <span className="ms-2 text-sm text-gray-600">Remember me</span>
+                    </label>
+                </div>
+
+                <div className="flex items-center justify-end mt-4">
+                    {canResetPassword && (
+                        <Link
+                            href={route('password.request')}
+                            className="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        >
+                            Forgot your password?
+                        </Link>
+                    )}
+
+                    <PrimaryButton className="ms-4" disabled={processing}>
+                        Log in
+                    </PrimaryButton>
+                </div>
+            </form>
+        </GuestLayout>
     );
 }

@@ -4,8 +4,7 @@ import { useState, useEffect } from 'react'
 import Header from '@/Pages/Header'
 import Footer from '@/Pages/Footer'
 import ProductModal from '@/Components/ProductModal'
-import { motion } from 'framer-motion'
-import { Head } from '@inertiajs/react'
+import { motion } from 'framer-motion';
 
 interface Belt {
     title: string;
@@ -27,7 +26,7 @@ export default function Cinturones() {
     const belts = [
         {
             title: "BB Simon Crystal",
-            price: "75.000 ARS",
+            price: "$299.99",
             description: "Cinturón con cristales Swarovski",
             image: "/images/image1.webp",
             category: "Premium",
@@ -78,9 +77,8 @@ export default function Cinturones() {
 
     return (
         <div className="min-h-screen bg-white">
-            <Head title="Cinturones - BeltSpot" />
             <Header />
-
+            
             {/* Hero Section */}
             <section className="relative h-[60vh]">
                 <div 
@@ -104,13 +102,7 @@ export default function Cinturones() {
             <section className="max-w-7xl mx-auto px-4 py-16">
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
                     {belts.map((belt, index) => (
-                        <motion.article 
-                            key={index} 
-                            className="space-y-3"
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.5, delay: index * 0.1 }}
-                        >
+                        <article key={index} className="space-y-3">
                             <div className="group relative overflow-hidden">
                                 <img
                                     src={belt.image}
@@ -133,7 +125,7 @@ export default function Cinturones() {
                                 <h3 className="text-lg font-medium">{belt.title}</h3>
                                 <p className="text-gray-600">{belt.price}</p>
                             </div>
-                        </motion.article>
+                        </article>
                     ))}
                 </div>
             </section>
