@@ -49,6 +49,10 @@ class LoginRequest extends FormRequest
             ]);
         }
 
+        if (Auth::user()->is_admin) {
+            session(['redirect_to' => route('admin.dashboard')]);
+        }
+
         RateLimiter::clear($this->throttleKey());
     }
 
@@ -80,6 +84,6 @@ class LoginRequest extends FormRequest
      */
     public function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->string('email')).'|'.$this->ip());
+        return Str::transliterate(Str::lower($this->input('email')).'|'.$this->ip());
     }
 }

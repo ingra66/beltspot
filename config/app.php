@@ -185,4 +185,6 @@ return [
         // 'Example' => App\Facades\Example::class,
     ])->toArray(),
 
+    'trusted_proxies' => env('TRUSTED_PROXIES', '*'),
+
 ];
