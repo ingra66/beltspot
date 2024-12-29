@@ -8,10 +8,10 @@ import { Button } from "@/shadcn/ui/button"
 const navigationLinks = [
     { name: 'INICIO', href: '/' },
     { name: 'SOBRE NOSOTROS', href: '/#brand-description' },
-    { name: 'CINTURONES', href: '/cinturones' },
-    { name: 'CADENAS', href: '/cadenas' },
-    { name: 'GORROS', href: '/gorros' },
-    { name: 'OTROS', href: '/otros' }
+    { name: 'CINTURONES', href: route('products.cinturones') },
+    { name: 'CADENAS', href: route('products.cadenas') },
+    { name: 'GORROS', href: route('products.gorros') },
+    { name: 'OTROS', href: route('products.otros') }
 ]
 
 export default function Header() {

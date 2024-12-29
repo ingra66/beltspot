@@ -24,10 +24,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                             {/* Navigation Links */}
                             <div className="hidden space-x-8 sm:ml-10 sm:flex items-center">
                                 <Link
-                                    href={route('admin.dashboard')}
+                                    href={route('admin.categories.index')}
                                     className="text-white hover:text-red-500 transition-colors px-4 py-2"
                                 >
-                                    CATÁLOGO
+                                    CATEGORÍAS
                                 </Link>
 
                                 <Link
