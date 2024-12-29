@@ -19,19 +19,19 @@ export default function Welcome() {
             title: "CINTOS",
             image: "images/cinturones.webp?height=600&width=400",
             background: "bg-black",
-            link: "/pages/products/cinturones"
+            link: route('products.cinturones')
         },
         {
             title: "CADENAS",
             image: "images/cadenas.webp?height=600&width=400",
             background: "bg-black",
-            link: "/pages/products/cadenas"
+            link: route('products.cadenas')
         },
         {
             title: "GORROS",
             image: "images/gorros.jpg?height=600&width=400",
             background: "bg-black",
-            link: "/pages/products/gorros"
+            link: route('products.gorros')
         }
     ]
 

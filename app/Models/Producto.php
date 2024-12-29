@@ -32,9 +32,4 @@ class Producto extends Model
     {
         return $this->belongsTo(Subcategoria::class, 'subcategoria');
     }
-
-    public function carrito()
-{
-    return $this->hasMany(Prodxcarr::class, 'id_prod');
-}
 }

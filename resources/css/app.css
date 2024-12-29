@@ -1,5 +1,3 @@
-@import 'admin-lte/dist/css/adminlte.min.css';
-@import '@fortawesome/fontawesome-free/css/all.min.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -65,20 +63,4 @@
   body {
     @apply bg-background text-foreground;
   }
-}
-
-@keyframes blink {
-    0% {
-        opacity: 1;
-    }
-    50% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-    }
-}
-
-.animate-blink {
-    animation: blink 0.8s ease-in-out infinite;
 }

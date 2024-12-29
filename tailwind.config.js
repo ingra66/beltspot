@@ -5,13 +5,7 @@ import forms from '@tailwindcss/forms';
 export default {
     darkMode: ['class'],
     content: [
-        './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
-        './storage/framework/views/*.php',
-        './resources/views/**/*.blade.php',
         './resources/js/**/*.tsx',
-        './resources/js/**/*.ts',
-        './resources/js/**/*.jsx',
-        './resources/js/**/*.js',
     ],
 
     theme: {
@@ -72,6 +66,7 @@ export default {
             animation: {
                 slideDown: "slideDown 0.5s ease-out forwards",
                 slideUp: "slideUp 0.5s ease-out forwards",
+                'blink': 'blink 0.8s ease-in-out infinite',
             },
             keyframes: {
                 slideDown: {
@@ -82,10 +77,13 @@ export default {
                     "0%": { transform: "scaleY(0)", opacity: "0" },
                     "100%": { transform: "scaleY(1)", opacity: "1" },
                 },
+                blink: {
+                    '0%, 100%': { opacity: '1' },
+                    '50%': { opacity: '0.5' },
+                }
             },
         }
     },
 
-    // Corregido: solo una declaración de plugins
     plugins: [forms, require("tailwindcss-animate")],
 };
