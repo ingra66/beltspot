@@ -49,4 +49,12 @@ class User extends Authenticatable
     {
         return $this->is_admin;
     }
+    /**
+    * Relación con la tabla Venta.
+     */
+    public function ventas()
+    {
+        return $this->hasMany(Venta::class, 'id_user');
+    }
+
 }
