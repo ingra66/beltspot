@@ -171,12 +171,13 @@ export default function Welcome() {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                         {offerProducts.map((item, index) => (
                             <motion.div 
-                                key={index} 
-                                className="group relative"
+                                key={index}
                                 initial={{ opacity: 0, y: 20 }}
                                 whileInView={{ opacity: 1, y: 0 }}
+                                whileHover={{ y: -10 }}
                                 viewport={{ once: true }}
-                                transition={{ duration: 0.6, delay: index * 0.1 }}
+                                transition={{ duration: 0.5, delay: index * 0.1 }}
+                                className="group relative"
                             >
                                 <div className="relative overflow-hidden">
                                     <img 
@@ -186,15 +187,15 @@ export default function Welcome() {
                                     />
                                     
                                     <div 
-                                        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10 pointer-events-none"
+                                        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
                                         style={{
                                             background: `
-                                                radial-gradient(circle at 20% 20%, rgba(255,255,255,0.9) 0%, transparent 6%) 50% 50% / 4.5% 4.5%,
-                                                radial-gradient(circle at 80% 80%, rgba(255,255,255,0.9) 0%, transparent 6%) 50% 50% / 4.5% 4.5%,
-                                                radial-gradient(circle at 40% 40%, rgba(255,255,255,0.9) 0%, transparent 6%) 30% 30% / 4.5% 4.5%,
-                                                radial-gradient(circle at 60% 60%, rgba(255,255,255,0.9) 0%, transparent 6%) 70% 70% / 4.5% 4.5%
+                                                radial-gradient(circle at 20% 20%, rgba(255,255,255,0.8) 0%, transparent 8%) 50% 50% / 8% 8%,
+                                                radial-gradient(circle at 80% 80%, rgba(255,255,255,0.8) 0%, transparent 8%) 50% 50% / 8% 8%,
+                                                radial-gradient(circle at 40% 40%, rgba(255,255,255,0.8) 0%, transparent 8%) 30% 30% / 8% 8%,
+                                                radial-gradient(circle at 60% 60%, rgba(255,255,255,0.8) 0%, transparent 8%) 70% 70% / 8% 8%
                                             `,
-                                            animation: 'sparklePoints 2s ease-in-out infinite'
+                                            animation: 'sparkle 2s ease-in-out infinite'
                                         }}
                                     />
                                     
@@ -207,14 +208,19 @@ export default function Welcome() {
                                         15% OFF
                                     </div>
 
-                                    <div className="absolute inset-x-0 bottom-0 h-[80px] opacity-0 group-hover:opacity-100 transition-all duration-300">
+                                    <div className="absolute inset-x-0 bottom-0 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
                                         <button 
                                             onClick={() => handleOpenModal(item)}
-                                            className="w-full h-full bg-gray-200/90 text-gray-800 font-medium hover:bg-gray-300/90 transition-all duration-300"
+                                            className="w-full py-4 bg-black/70 backdrop-blur-sm text-white hover:bg-black/80 transition-all duration-300"
                                         >
-                                            MOSTRAR MAS OPCIONES
+                                            MOSTRAR MÁS OPCIONES
                                         </button>
                                     </div>
+                                </div>
+
+                                <div className="mt-4 px-2">
+                                    <h3 className="text-lg font-medium">{item.title}</h3>
+                                    <p className="text-red-600 font-semibold">{item.price}</p>
                                 </div>
                             </motion.div>
                         ))}
@@ -232,13 +238,9 @@ export default function Welcome() {
             <Footer />
 
             <style jsx>{`
-                @keyframes flicker {
-                    0%, 100% {
-                        opacity: 1;
-                    }
-                    50% {
-                        opacity: 0.7;
-                    }
+                @keyframes sparkle {
+                    0%, 100% { opacity: 0.8; }
+                    50% { opacity: 0.4; }
                 }
             `}</style>
         </div>

@@ -10,4 +10,11 @@ export default defineConfig({
         }),
         react(),
     ],
+    css: {
+        resolve: {
+            alias: {
+                '@': '/resources/js',
+            },
+        },
+    },
 });

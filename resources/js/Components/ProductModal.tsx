@@ -2,7 +2,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, ZoomIn } from 'lucide-react';
 import { Button } from "@/shadcn/ui/button";
 import { useEffect, useState } from 'react';
-import TypeIt from "typeit";
 
 interface Belt {
     title: string;
@@ -24,44 +23,32 @@ export default function ProductModal({ isOpen, onClose, product }: ProductModalP
     const [showFullImage, setShowFullImage] = useState(false);
     const sizes = [90, 95, 100, 105, 110, 115];
 
-    useEffect(() => {
-        if (isOpen && product) {
-            new TypeIt("#beltTitle", {
-                speed: 50,
-                waitUntilVisible: true,
-                cursor: false,
-            }).go();
-
-            new TypeIt("#beltPrice", {
-                speed: 50,
-                waitUntilVisible: true,
-                startDelay: 500,
-                cursor: false,
-            }).go();
-
-            new TypeIt("#beltDescription", {
-                speed: 50,
-                waitUntilVisible: true,
-                startDelay: 1000,
-                cursor: false,
-            }).go();
-        }
-    }, [isOpen, product]);
-
     if (!product) return null;
 
     return (
         <AnimatePresence>
             {isOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center">
-                    <div className="absolute inset-0 bg-black/50" onClick={onClose} />
+                    <motion.div 
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.8 }}
+                        className="absolute inset-0 bg-black/50" 
+                        onClick={onClose} 
+                    />
                     <div className="relative w-[90%] md:w-auto overflow-hidden flex flex-col md:flex-row">
                         {/* Image Side */}
                         <motion.div 
-                            initial={{ height: 1, opacity: 1, y: "100vh" }}
-                            animate={{ height: "auto", y: 0 }}
-                            transition={{ duration: 0.5, ease: [0.87, 0, 0.13, 1] }}
-                            className="relative w-full md:w-auto bg-white group cursor-pointer overflow-hidden origin-bottom"
+                            initial={{ y: "100%", opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            exit={{ y: "100%", opacity: 0 }}
+                            transition={{ 
+                                duration: 0.8,
+                                ease: [0.16, 1, 0.3, 1],
+                                delay: 0.1 
+                            }}
+                            className="relative w-full md:w-auto bg-white group cursor-pointer overflow-hidden"
                             onClick={() => setShowFullImage(true)}
                         >
                             <motion.div
@@ -85,10 +72,15 @@ export default function ProductModal({ isOpen, onClose, product }: ProductModalP
 
                         {/* Content Side */}
                         <motion.div 
-                            initial={{ height: 1, opacity: 1, y: "100vh" }}
-                            animate={{ height: "auto", y: 0 }}
-                            transition={{ duration: 0.5, ease: [0.87, 0, 0.13, 1], delay: 0.1 }}
-                            className="w-full md:w-[400px] bg-gray-200 overflow-hidden origin-bottom"
+                            initial={{ y: "100%", opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            exit={{ y: "100%", opacity: 0 }}
+                            transition={{ 
+                                duration: 0.8,
+                                ease: [0.16, 1, 0.3, 1],
+                                delay: 0.2
+                            }}
+                            className="w-full md:w-[400px] bg-gray-200 overflow-hidden"
                         >
                             <motion.div
                                 initial={{ opacity: 0 }}
@@ -98,13 +90,13 @@ export default function ProductModal({ isOpen, onClose, product }: ProductModalP
                             >
                                 <div>
                                     <h3 className="text-xs text-gray-600 mb-2">BB SIMON</h3>
-                                    <h2 id="beltTitle" className="text-xl md:text-2xl font-medium mb-3 text-gray-900">
+                                    <h2 className="text-xl md:text-2xl font-medium mb-3 text-gray-900">
                                         {product.title}
                                     </h2>
-                                    <p id="beltPrice" className="text-base md:text-lg text-gray-900">
+                                    <p className="text-base md:text-lg text-gray-900">
                                         {product.price}
                                     </p>
-                                    <p id="beltDescription" className="text-xs md:text-sm text-gray-600 mt-1">
+                                    <p className="text-xs md:text-sm text-gray-600 mt-1">
                                         {product.description}
                                     </p>
                                 </div>
@@ -145,31 +137,36 @@ export default function ProductModal({ isOpen, onClose, product }: ProductModalP
                             </motion.div>
                         </motion.div>
 
-                        {/* Botón de cierre */}
+                        {/* Close button */}
                         <motion.button 
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.8 }}
+                            transition={{ duration: 0.5, delay: 0.6 }}
                             onClick={onClose}
                             className="absolute right-2 top-2 md:right-4 md:top-4 z-10 p-1.5 md:p-2 hover:bg-gray-100 rounded-full transition-colors"
-                            whileHover={{ rotate: 45 }}
-                            transition={{ duration: 0.2 }}
+                            whileHover={{ rotate: 90 }}
                         >
                             <X size={20} className="text-gray-600" />
                         </motion.button>
                     </div>
 
-                    {/* Modal de imagen completa */}
+                    {/* Full image modal */}
                     <AnimatePresence>
                         {showFullImage && (
                             <motion.div
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
+                                transition={{ duration: 0.8 }}
                                 className="fixed inset-0 z-[60] bg-black/90 flex items-center justify-center p-4"
                                 onClick={() => setShowFullImage(false)}
                             >
                                 <motion.img
-                                    initial={{ scale: 0.9 }}
-                                    animate={{ scale: 1 }}
-                                    exit={{ scale: 0.9 }}
+                                    initial={{ scale: 0.9, y: 50 }}
+                                    animate={{ scale: 1, y: 0 }}
+                                    exit={{ scale: 0.9, y: 50 }}
+                                    transition={{ duration: 0.8 }}
                                     src={product.image}
                                     alt={product.title}
                                     className="max-w-full max-h-[90vh] object-contain"
