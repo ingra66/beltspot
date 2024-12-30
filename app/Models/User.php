@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'is_admin',
     ];
 
     /**
@@ -41,5 +42,19 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'is_admin' => 'boolean',
     ];
+
+    public function isAdmin()
+    {
+        return $this->is_admin;
+    }
+    /**
+    * Relación con la tabla Venta.
+     */
+    public function ventas()
+    {
+        return $this->hasMany(Venta::class, 'id_user');
+    }
+
 }

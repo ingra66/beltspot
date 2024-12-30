@@ -10,7 +10,7 @@ export default function Footer() {
                 <div>
                     <h3 className="text-sm font-medium mb-4">SHOP</h3>
                     <ul className="space-y-3">
-                        <li><Link href={route('home')} className="hover:underline text-sm">INICIO</Link></li>
+                        <li><Link href="/" className="hover:underline text-sm">INICIO</Link></li>
                         <li><Link href="/#brand-description" className="hover:underline text-sm">SOBRE NOSOTROS</Link></li>
                         <li><Link href={route('products.cinturones')} className="hover:underline text-sm">CINTURONES</Link></li>
                         <li><Link href={route('products.cadenas')} className="hover:underline text-sm">CADENAS</Link></li>
