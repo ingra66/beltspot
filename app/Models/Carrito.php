@@ -2,13 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Carrito extends Model
 {
-    use HasFactory;
-
     protected $table = 'carrito';
 
     protected $fillable = [
@@ -17,31 +16,22 @@ class Carrito extends Model
         'fech_actu',
         'estado',
         'metodo_pago',
-        'precio_total',
+        'precio_total'
     ];
 
-    /**
-     * Relación con los productos en el carrito.
-     */
-    public function productos()
-    {
-        return $this->hasMany(Prodxcarr::class, 'id_carr');
-    }
+    protected $casts = [
+        'fech_inicio' => 'datetime',
+        'fech_actu' => 'datetime',
+        'precio_total' => 'decimal:2'
+    ];
 
-    /**
-     * Relación con el usuario dueño del carrito.
-     */
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'id_user');
     }
-    
-    /**
-    * Relación con la tabla Venta.
-    */
-    public function ventas()
-    {
-        return $this->hasOne(Venta::class, 'id_carr');
-    }
 
+    public function items(): HasMany
+    {
+        return $this->hasMany(ProdXCarr::class, 'id_carr');
+    }
 }

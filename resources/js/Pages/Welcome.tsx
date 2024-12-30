@@ -137,7 +137,14 @@ export default function Welcome({ offerProducts }: Props) {
             {/* Brand Description */}
             <div className="bg-black text-white py-20" id="brand-description">
                 <div className="max-w-4xl mx-auto text-center px-4">
-                    <h2 className="text-5xl font-bold mb-8">BELTSPOT</h2>
+                    <div className="flex items-center justify-center gap-4 mb-8">
+                        <img
+                            src="/images/logo.png"
+                            alt="Beltspot Logo"
+                            className="h-16 w-auto" // Reduje un poco el tamaño para que coincida mejor con el texto
+                        />
+                        <h2 className="text-5xl font-bold font-blue-goblet">beltspot</h2>
+                    </div>
                     <p className="text-lg mb-8 leading-relaxed text-gray-200">
                         Beltspot es una marca que se especializa en la venta de productos importados a Argentina,
                         principalmente cintos de cristales Swarovski. Nuestra misión es mostrar lujo y moda moderna

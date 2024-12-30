@@ -1,7 +1,8 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ZoomIn } from 'lucide-react';
+import { X, ZoomIn, Plus, Minus } from 'lucide-react';
 import { Button } from "@/shadcn/ui/button";
 import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 interface Product {
     id: number;
@@ -34,8 +35,29 @@ interface ProductModalProps {
 
 export default function ProductModal({ isOpen, onClose, product }: ProductModalProps) {
     const [showFullImage, setShowFullImage] = useState(false);
+    const [quantity, setQuantity] = useState(1);
+    const [isLoading, setIsLoading] = useState(false);
     
     if (!isOpen) return null;
+
+    const handleAddToCart = async () => {
+        try {
+            setIsLoading(true);
+            await axios.post('/api/cart/add', {
+                producto_id: product.id,
+                cantidad: quantity
+            });
+            
+            // Opcional: Mostrar notificación de éxito
+            alert('Producto agregado al carrito');
+            onClose();
+        } catch (error) {
+            console.error('Error al agregar al carrito:', error);
+            alert('Error al agregar al carrito');
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     return (
         <AnimatePresence>
@@ -123,14 +145,37 @@ export default function ProductModal({ isOpen, onClose, product }: ProductModalP
                                 </div>
 
                                 <div className="mt-6 md:mt-8 space-y-4">
+                                    {/* Selector de cantidad */}
+                                    <div className="flex items-center justify-center space-x-4 mb-4">
+                                        <button 
+                                            onClick={() => setQuantity(prev => Math.max(1, prev - 1))}
+                                            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                                            disabled={quantity <= 1}
+                                        >
+                                            <Minus className="w-4 h-4" />
+                                        </button>
+                                        <span className="w-12 text-center font-medium">{quantity}</span>
+                                        <button 
+                                            onClick={() => setQuantity(prev => Math.min(product.stock, prev + 1))}
+                                            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                                            disabled={quantity >= product.stock}
+                                        >
+                                            <Plus className="w-4 h-4" />
+                                        </button>
+                                    </div>
+
                                     <motion.div
                                         whileHover={{ scale: 1.02 }}
                                         whileTap={{ scale: 0.98 }}
                                     >
                                         <Button 
                                             className="w-full h-10 md:h-12 bg-white hover:bg-gray-50 text-black border-2 border-black rounded-none text-sm md:text-base"
+                                            onClick={handleAddToCart}
+                                            disabled={isLoading || product.stock < 1}
                                         >
-                                            Añadir al carrito
+                                            {isLoading ? 'Agregando...' : 
+                                             product.stock < 1 ? 'Sin stock' : 
+                                             'Añadir al carrito'}
                                         </Button>
                                     </motion.div>
 
@@ -140,6 +185,7 @@ export default function ProductModal({ isOpen, onClose, product }: ProductModalP
                                     >
                                         <Button 
                                             className="w-full h-10 md:h-12 bg-sky-500 hover:bg-sky-600 text-white rounded-none text-sm md:text-base"
+                                            disabled={product.stock < 1}
                                         >
                                             Pagar con Mercado Pago
                                         </Button>
