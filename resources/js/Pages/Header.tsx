@@ -107,14 +107,17 @@ export default function Header() {
 
                                 <Link 
                                     href="/" 
-                                    className={`text-3xl ${isHovered ? 'text-white' : 'text-black'}`}
-                                    aria-label="Beltspot Home"
+                                    className="text-4xl"
                                     style={{ 
-                                        fontFamily: 'Brush Hand, cursive',
-                                        letterSpacing: '1px'
+                                        fontFamily: 'Blue Goblet Alternate One, cursive',
+                                        letterSpacing: '2px',
+                                        color: isHovered ? 'white' : 'black',
+                                        transition: 'all 0.3s ease',
+                                        textTransform: 'lowercase'
                                     }}
+                                    aria-label="Beltspot Home"
                                 >
-                                    Beltspot
+                                    beltspot
                                 </Link>
 
                                 <div className="flex items-center space-x-4 w-[120px] justify-end">
