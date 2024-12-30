@@ -1,38 +1,37 @@
 <?php
 
 use App\Http\Controllers\AdminController;
-Use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\Admin\CategoryController;
-use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\AdminProductController;
+use App\Http\Controllers\WelcomeController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome');
 });
+Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
 
 Route::get('login', function () {
     return Inertia::render('Auth/Login');
 })->middleware('guest')->name('login');
 
 // Rutas de productos
-Route::get('/cinturones', function () {
-    return Inertia::render('Products/Cinturones');
-})->name('products.cinturones');
+Route::get('/cinturones', [ProductController::class, 'cinturones'])
+    ->name('products.cinturones');
 
-Route::get('/cadenas', function () {
-    return Inertia::render('Products/Cadenas');
-})->name('products.cadenas');
+Route::get('/cadenas', [ProductController::class, 'cadenas'])
+    ->name('products.cadenas');
 
-Route::get('/gorros', function () {
-    return Inertia::render('Products/Gorros');
-})->name('products.gorros');
+Route::get('/gorros', [ProductController::class, 'gorros'])
+    ->name('products.gorros');
 
-Route::get('/otros', function () {
-    return Inertia::render('Products/Otros');
-})->name('products.otros');
+Route::get('/otros', [ProductController::class, 'otros'])
+    ->name('products.otros');
 
 
 Route::middleware(['auth', 'admin'])->group(function () {
@@ -63,7 +62,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
         ]);
     });
 
-    Route::resource('admin/products', ProductController::class)->names([
+    Route::resource('admin/products', AdminProductController::class)->names([
         'index' => 'admin.products.index',
         'create' => 'admin.products.create',
         'store' => 'admin.products.store',

@@ -4,15 +4,38 @@ import { Head } from '@inertiajs/react'
 import Header from '@/Pages/Header'
 import Footer from '@/Pages/Footer'
 import ProductGrid from '@/Components/ProductGrid'
-import { caps } from './products'  // Importamos las gorras del archivo products.ts
 
-export default function Gorros() {
+interface Props {
+    products: {
+        id: number;
+        nombre: string;
+        descripcion: string;
+        precio_reg: number;
+        precio_ofert: number | null;
+        act_ofert: boolean;
+        ver_act: boolean;
+        stock: number;
+        categoria: {
+            id: number;
+            nombre: string;
+        };
+        subcategoria: {
+            id: number;
+            nombre: string;
+        };
+        imagenes: {
+            id: number;
+            img: string;
+        }[];
+    }[];
+}
+
+export default function Gorros({ products }: Props) {
     return (
         <div className="min-h-screen bg-white">
             <Head title="Gorros - BeltSpot" />
             <Header />
 
-            {/* Hero Section */}
             <section className="relative h-[60vh]">
                 <div 
                     className="absolute inset-0 bg-cover bg-center" 
@@ -31,9 +54,8 @@ export default function Gorros() {
                 </div>
             </section>
 
-            {/* Products Grid */}
             <section className="max-w-7xl mx-auto px-4 py-16">
-                <ProductGrid products={caps} />
+                <ProductGrid products={products} />
             </section>
 
             <Footer />

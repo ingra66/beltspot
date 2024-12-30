@@ -3,20 +3,33 @@ import { useState } from 'react';
 import ProductModal from './ProductModal';
 
 interface Product {
-    title: string;
-    price: string;
-    description: string;
-    image: string;
-    category: string;
-    size?: string;
+    id: number;
+    nombre: string;
+    descripcion: string;
+    precio_reg: number;
+    precio_ofert: number | null;
+    act_ofert: boolean;
+    ver_act: boolean;
+    stock: number;
+    categoria: {
+        id: number;
+        nombre: string;
+    };
+    subcategoria: {
+        id: number;
+        nombre: string;
+    };
+    imagenes: {
+        id: number;
+        img: string;
+    }[];
 }
 
 interface ProductGridProps {
     products: Product[];
-    showDiscount?: boolean;
 }
 
-export default function ProductGrid({ products, showDiscount = false }: ProductGridProps) {
+export default function ProductGrid({ products }: ProductGridProps) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
@@ -25,59 +38,86 @@ export default function ProductGrid({ products, showDiscount = false }: ProductG
         setIsModalOpen(true);
     };
 
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+        setSelectedProduct(null);
+    };
+
     return (
-        <>
+        <div>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
                 {products.map((product, index) => (
-                    <motion.article 
-                        key={index} 
-                        className="space-y-3"
+                    <motion.div 
+                        key={product.id}
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: index * 0.1 }}
+                        className="group relative"
                     >
-                        <div className="group relative overflow-hidden">
+                        <div className="relative overflow-hidden">
                             <img
-                                src={product.image}
-                                alt={product.title}
-                                className="w-full aspect-square object-cover"
+                                src={product.imagenes[0]?.img || '/placeholder.jpg'}
+                                alt={product.nombre}
+                                className="w-full aspect-square object-cover transition-transform duration-300 group-hover:scale-105"
                             />
-                            <div className="absolute inset-0 bg-transparent group-hover:bg-transparent transition-opacity duration-300">
-                                <div className="absolute bottom-0 left-0 right-0 p-3 md:p-4 bg-black/40 backdrop-blur-sm transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                            
+                            {/* Overlay con botón - solo en la parte inferior */}
+                            <div className="absolute bottom-0 left-0 right-0">
+                                <div className="transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
                                     <button 
-                                        className="w-full text-[10px] md:text-xs text-white font-light tracking-wider cursor-pointer" 
                                         onClick={() => handleOpenModal(product)}
+                                        className="w-full bg-gray-100/80 backdrop-blur-sm py-3 text-[10px] md:text-xs text-gray-800 font-medium tracking-wider cursor-pointer hover:bg-gray-200/80 transition-colors"
                                     >
                                         MOSTRAR MÁS OPCIONES
                                     </button>
                                 </div>
                             </div>
 
-                            {showDiscount && (
-                                <div 
+                            {/* Etiqueta de oferta */}
+                            {product.act_ofert && product.precio_ofert && (
+                                <motion.div 
+                                    initial={{ x: 50 }}
+                                    animate={{ x: 0 }}
                                     className="absolute -right-2 top-4 bg-red-600 text-white px-4 py-2 text-sm font-bold z-20"
                                     style={{
                                         clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%, 10% 50%)'
                                     }}
                                 >
-                                    15% OFF
-                                </div>
+                                    OFERTA
+                                </motion.div>
                             )}
                         </div>
 
-                        <div className="space-y-1 px-2">
-                            <h3 className="text-lg font-medium">{product.title}</h3>
-                            <p className="text-gray-600">{product.price}</p>
+                        <div className="space-y-1 px-2 mt-3">
+                            <h3 className="font-medium truncate">{product.nombre}</h3>
+                            <div className="flex flex-col">
+                                {product.act_ofert && product.precio_ofert ? (
+                                    <>
+                                        <span className="text-red-500 text-lg font-medium">
+                                            ${product.precio_ofert}
+                                        </span>
+                                        <span className="text-gray-500 text-sm line-through">
+                                            ${product.precio_reg}
+                                        </span>
+                                    </>
+                                ) : (
+                                    <span className="text-gray-600 text-lg">
+                                        ${product.precio_reg}
+                                    </span>
+                                )}
+                            </div>
                         </div>
-                    </motion.article>
+                    </motion.div>
                 ))}
             </div>
 
-            <ProductModal 
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-                product={selectedProduct}
-            />
-        </>
+            {isModalOpen && selectedProduct && (
+                <ProductModal
+                    isOpen={isModalOpen}
+                    onClose={handleCloseModal}
+                    product={selectedProduct}
+                />
+            )}
+        </div>
     );
 } 

@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Storage;
 
-class ProductController extends Controller
+class AdminProductController extends Controller
 {
     public function index()
     {

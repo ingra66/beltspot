@@ -4,9 +4,33 @@ import { Head } from '@inertiajs/react'
 import Header from '@/Pages/Header'
 import Footer from '@/Pages/Footer'
 import ProductGrid from '@/Components/ProductGrid'
-import { chains } from './products'  // Importamos las cadenas del archivo products.ts
 
-export default function Cadenas() {
+interface Props {
+    products: {
+        id: number;
+        nombre: string;
+        descripcion: string;
+        precio_reg: number;
+        precio_ofert: number | null;
+        act_ofert: boolean;
+        ver_act: boolean;
+        stock: number;
+        categoria: {
+            id: number;
+            nombre: string;
+        };
+        subcategoria: {
+            id: number;
+            nombre: string;
+        };
+        imagenes: {
+            id: number;
+            img: string;
+        }[];
+    }[];
+}
+
+export default function Cadenas({ products }: Props) {
     return (
         <div className="min-h-screen bg-white">
             <Head title="Cadenas - BeltSpot" />
@@ -31,7 +55,7 @@ export default function Cadenas() {
             </section>
 
             <section className="max-w-7xl mx-auto px-4 py-16">
-                <ProductGrid products={chains} />
+                <ProductGrid products={products} />
             </section>
 
             <Footer />

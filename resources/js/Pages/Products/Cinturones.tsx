@@ -4,9 +4,33 @@ import { Head } from '@inertiajs/react'
 import Header from '@/Pages/Header'
 import Footer from '@/Pages/Footer'
 import ProductGrid from '@/Components/ProductGrid'
-import { belts } from './products'
 
-export default function Cinturones() {
+interface Props {
+    products: {
+        id: number;
+        nombre: string;
+        descripcion: string;
+        precio_reg: number;
+        precio_ofert: number | null;
+        act_ofert: boolean;
+        ver_act: boolean;
+        stock: number;
+        categoria: {
+            id: number;
+            nombre: string;
+        };
+        subcategoria: {
+            id: number;
+            nombre: string;
+        };
+        imagenes: {
+            id: number;
+            img: string;
+        }[];
+    }[];
+}
+
+export default function Cinturones({ products }: Props) {
     return (
         <div className="min-h-screen bg-white">
             <Head title="Cinturones - BeltSpot" />
@@ -31,7 +55,7 @@ export default function Cinturones() {
             </section>
 
             <section className="max-w-7xl mx-auto px-4 py-16">
-                <ProductGrid products={belts} />
+                <ProductGrid products={products} />
             </section>
 
             <Footer />

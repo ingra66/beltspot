@@ -109,11 +109,19 @@ export default function Index({ products }: Props) {
                                         </td>
                                         <td className="py-3 px-4 text-white">{product.stock}</td>
                                         <td className="py-3 px-4">
-                                            <div className="text-white">
-                                                ${product.precio_reg}
-                                                {product.act_ofert && product.precio_ofert && (
-                                                    <span className="ml-2 text-red-500 line-through">
-                                                        ${product.precio_ofert}
+                                            <div className="flex flex-col">
+                                                {product.act_ofert && product.precio_ofert ? (
+                                                    <>
+                                                        <span className="text-red-500">
+                                                            ${product.precio_ofert}
+                                                        </span>
+                                                        <span className="text-white line-through opacity-75">
+                                                            ${product.precio_reg}
+                                                        </span>
+                                                    </>
+                                                ) : (
+                                                    <span className="text-white">
+                                                        ${product.precio_reg}
                                                     </span>
                                                 )}
                                             </div>

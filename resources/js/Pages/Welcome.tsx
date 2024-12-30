@@ -10,9 +10,36 @@ import PageLoader from '@/Components/PageLoader';
 import ProductModal from '@/Components/ProductModal';
 import { useState } from 'react';
 
-export default function Welcome() {
+interface Product {
+    id: number;
+    nombre: string;
+    descripcion: string;
+    precio_reg: number;
+    precio_ofert: number | null;
+    act_ofert: boolean;
+    ver_act: boolean;
+    stock: number;
+    categoria: {
+        id: number;
+        nombre: string;
+    };
+    subcategoria: {
+        id: number;
+        nombre: string;
+    };
+    imagenes: {
+        id: number;
+        img: string;
+    }[];
+}
+
+interface Props {
+    offerProducts: Product[];
+}
+
+export default function Welcome({ offerProducts }: Props) {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [selectedProduct, setSelectedProduct] = useState(null);
+    const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
     const products = [
         {
@@ -35,42 +62,7 @@ export default function Welcome() {
         }
     ]
 
-    const offerProducts = [
-        {
-            title: "Cinto Premium BB Simon",
-            price: "$259.99",
-            description: "Cinturón con cristales Swarovski, edición limitada con 15% de descuento",
-            image: "images/cinto1.jpg",
-            category: "Oferta Especial",
-            size: "100cm"
-        },
-        {
-            title: "Cinto Elegance BB Simon",
-            price: "$279.99",
-            description: "Diseño exclusivo con cristales premium, ahorra 15% en tu compra",
-            image: "images/cinto2.jpg",
-            category: "Oferta Especial",
-            size: "100cm"
-        },
-        {
-            title: "Cinto Classic BB Simon",
-            price: "$239.99",
-            description: "Modelo clásico con detalles brillantes, 15% off en tiempo limitado",
-            image: "images/cinto3.jpg",
-            category: "Oferta Especial",
-            size: "100cm"
-        },
-        {
-            title: "Cinto Luxury BB Simon",
-            price: "$299.99",
-            description: "Edición especial con acabados premium, aprovecha 15% de descuento",
-            image: "images/cinto4.jpg",
-            category: "Oferta Especial",
-            size: "100cm"
-        }
-    ];
-
-    const handleOpenModal = (product) => {
+    const handleOpenModal = (product: Product) => {
         setSelectedProduct(product);
         setIsModalOpen(true);
     };
@@ -169,9 +161,9 @@ export default function Welcome() {
                         OFERTAS
                     </motion.h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                        {offerProducts.map((item, index) => (
+                        {offerProducts.map((product, index) => (
                             <motion.div 
-                                key={index}
+                                key={product.id}
                                 initial={{ opacity: 0, y: 20 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 whileHover={{ y: -10 }}
@@ -181,22 +173,9 @@ export default function Welcome() {
                             >
                                 <div className="relative overflow-hidden">
                                     <img 
-                                        src={item.image}
-                                        alt={item.title}
+                                        src={product.imagenes[0]?.img}
+                                        alt={product.nombre}
                                         className="w-full h-[400px] object-cover transition-transform duration-300 group-hover:scale-110"
-                                    />
-                                    
-                                    <div 
-                                        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
-                                        style={{
-                                            background: `
-                                                radial-gradient(circle at 20% 20%, rgba(255,255,255,0.8) 0%, transparent 8%) 50% 50% / 8% 8%,
-                                                radial-gradient(circle at 80% 80%, rgba(255,255,255,0.8) 0%, transparent 8%) 50% 50% / 8% 8%,
-                                                radial-gradient(circle at 40% 40%, rgba(255,255,255,0.8) 0%, transparent 8%) 30% 30% / 8% 8%,
-                                                radial-gradient(circle at 60% 60%, rgba(255,255,255,0.8) 0%, transparent 8%) 70% 70% / 8% 8%
-                                            `,
-                                            animation: 'sparkle 2s ease-in-out infinite'
-                                        }}
                                     />
                                     
                                     <div 
@@ -205,12 +184,12 @@ export default function Welcome() {
                                             clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%, 10% 50%)'
                                         }}
                                     >
-                                        15% OFF
+                                        {Math.round(((product.precio_reg - product.precio_ofert) / product.precio_reg) * 100)}% OFF
                                     </div>
 
                                     <div className="absolute inset-x-0 bottom-0 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
                                         <button 
-                                            onClick={() => handleOpenModal(item)}
+                                            onClick={() => handleOpenModal(product)}
                                             className="w-full py-4 bg-black/70 backdrop-blur-sm text-white hover:bg-black/80 transition-all duration-300"
                                         >
                                             MOSTRAR MÁS OPCIONES
@@ -219,8 +198,15 @@ export default function Welcome() {
                                 </div>
 
                                 <div className="mt-4 px-2">
-                                    <h3 className="text-lg font-medium">{item.title}</h3>
-                                    <p className="text-red-600 font-semibold">{item.price}</p>
+                                    <h3 className="text-lg font-medium">{product.nombre}</h3>
+                                    <div className="flex items-center gap-2">
+                                        <p className="text-red-600 font-semibold text-lg">
+                                            ${product.precio_ofert}
+                                        </p>
+                                        <p className="text-gray-500 line-through text-sm">
+                                            ${product.precio_reg}
+                                        </p>
+                                    </div>
                                 </div>
                             </motion.div>
                         ))}

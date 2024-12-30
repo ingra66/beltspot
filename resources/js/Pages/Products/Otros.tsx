@@ -4,15 +4,41 @@ import { Head } from '@inertiajs/react'
 import Header from '@/Pages/Header'
 import Footer from '@/Pages/Footer'
 import ProductGrid from '@/Components/ProductGrid'
-import { others } from './products'  // Importamos otros productos del archivo products.ts
 
-export default function Otros() {
+interface Props {
+    products: {
+        id: number;
+        nombre: string;
+        descripcion: string;
+        precio_reg: number;
+        precio_ofert: number | null;
+        act_ofert: boolean;
+        ver_act: boolean;
+        stock: number;
+        categoria: {
+            id: number;
+            nombre: string;
+        };
+        subcategoria: {
+            id: number;
+            nombre: string;
+        };
+        imagenes: {
+            id: number;
+            img: string;
+        }[];
+    }[];
+}
+
+export default function Otros({ products }: Props) {
+    // Verificamos si hay productos
+    const hasProducts = products && products.length > 0;
+
     return (
         <div className="min-h-screen bg-white">
             <Head title="Otros Productos - BeltSpot" />
             <Header />
 
-            {/* Hero Section */}
             <section className="relative h-[60vh]">
                 <div 
                     className="absolute inset-0 bg-cover bg-center" 
@@ -32,7 +58,13 @@ export default function Otros() {
             </section>
 
             <section className="max-w-7xl mx-auto px-4 py-16">
-                <ProductGrid products={others} />
+                {hasProducts ? (
+                    <ProductGrid products={products} />
+                ) : (
+                    <div className="text-center py-12">
+                        <p className="text-gray-600">No hay productos disponibles en este momento.</p>
+                    </div>
+                )}
             </section>
 
             <Footer />
