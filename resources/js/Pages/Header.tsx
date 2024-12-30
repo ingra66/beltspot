@@ -1,9 +1,20 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Link, router } from '@inertiajs/react'
-import { ShoppingCartIcon, MicroscopeIcon as MagnifyingGlassIcon, UserIcon } from 'lucide-react'
+import { Link, router, usePage } from '@inertiajs/react'
+import { ShoppingCartIcon, SearchIcon, UserIcon, LogOutIcon } from 'lucide-react'
 import { Button } from "@/shadcn/ui/button"
+
+interface PageProps {
+    auth: {
+        user: {
+            id: number;
+            name: string;
+            email: string;
+            is_admin: boolean;
+        } | null;
+    };
+}
 
 const navigationLinks = [
     { name: 'INICIO', href: '/' },
@@ -15,6 +26,7 @@ const navigationLinks = [
 ]
 
 export default function Header() {
+    const { auth } = usePage<PageProps>().props
     const [scrolled, setScrolled] = useState(false)
     const [isHovered, setIsHovered] = useState(false)
 
@@ -73,67 +85,103 @@ export default function Header() {
         <>
             <header className="fixed top-0 left-0 w-full z-50 transition-all duration-300">
                 <div 
-                    className={`bg-black text-white text-center py-2 text-sm transition-all duration-300 ${scrolled ? 'opacity-0 h-0 overflow-hidden' : 'opacity-100 h-8'}`}
+                    className={`bg-black text-white text-center py-3 text-sm transition-all duration-300 
+                        ${scrolled ? 'opacity-0 h-0 overflow-hidden' : 'opacity-100 h-10'}`}
                     aria-hidden={scrolled}
                 >
                     Bienvenido a Beltspot® - Donde el Lujo se Encuentra con el Estilo
                 </div>
 
                 <nav
-                    className={`fixed w-full transition-all duration-300 ${scrolled ? 'top-0' : 'top-8'} ${isHovered ? 'bg-black' : 'bg-white'}`}
+                    className={`fixed w-full transition-all duration-300 
+                        ${scrolled ? 'top-0' : 'top-10'} 
+                        ${isHovered ? 'bg-black' : 'bg-white'}`}
                     onMouseEnter={() => setIsHovered(true)}
                     onMouseLeave={() => setIsHovered(false)}
                     role="navigation"
                 >
                     <div className={`w-full border-b transition-all duration-300 ${isHovered ? 'border-white' : 'border-transparent'}`}>
-                        <div className="max-w-7xl mx-auto px-4">
-                            <div className="flex justify-between items-center py-4">
+                        <div className="max-w-6xl mx-auto px-4">
+                            <div className="flex justify-between items-center py-3">
+                                <div className="w-[120px]"></div>
+
                                 <Link 
                                     href="/" 
-                                    className={`text-2xl font-bold ${isHovered ? 'text-white' : 'text-black'}`}
+                                    className={`text-3xl ${isHovered ? 'text-white' : 'text-black'}`}
                                     aria-label="Beltspot Home"
+                                    style={{ 
+                                        fontFamily: 'Brush Hand, cursive',
+                                        letterSpacing: '1px'
+                                    }}
                                 >
                                     Beltspot
                                 </Link>
 
-                                <div className="hidden md:flex flex-1 justify-center space-x-4">
+                                <div className="flex items-center space-x-4 w-[120px] justify-end">
+                                    <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        className={`transition-all duration-300 w-12 h-12 rounded-full flex items-center justify-center
+                                            ${isHovered ? 'text-white hover:bg-red-600' : 'text-black hover:bg-red-600 hover:text-white'}`}
+                                        aria-label="Buscar"
+                                    >
+                                        <SearchIcon className="w-6 h-6" />
+                                    </Button>
+
+                                    <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        className={`transition-all duration-300 w-12 h-12 rounded-full flex items-center justify-center
+                                            ${isHovered ? 'text-white hover:bg-red-600' : 'text-black hover:bg-red-600 hover:text-white'}`}
+                                        aria-label="Carrito de compras"
+                                    >
+                                        <ShoppingCartIcon className="w-6 h-6" />
+                                    </Button>
+
+                                    {auth.user ? (
+                                        !auth.user.is_admin ? (
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                className={`transition-all duration-300 w-12 h-12 rounded-full flex items-center justify-center
+                                                    ${isHovered ? 'text-white hover:bg-red-600' : 'text-black hover:bg-red-600 hover:text-white'}`}
+                                                aria-label="Cerrar sesión"
+                                                onClick={() => router.post(route('logout'))}
+                                            >
+                                                <LogOutIcon className="w-6 h-6" />
+                                            </Button>
+                                        ) : null
+                                    ) : (
+                                        <Button
+                                            variant="ghost"
+                                            size="sm"
+                                            className={`transition-all duration-300 w-12 h-12 rounded-full flex items-center justify-center
+                                                ${isHovered ? 'text-white hover:bg-red-600' : 'text-black hover:bg-red-600 hover:text-white'}`}
+                                            onClick={() => router.visit('/login')}
+                                            aria-label="Cuenta de usuario"
+                                        >
+                                            <UserIcon className="w-6 h-6" />
+                                        </Button>
+                                    )}
+                                </div>
+                            </div>
+
+                            <div 
+                                className={`transition-all duration-300 
+                                    ${scrolled ? 'opacity-0 h-0 overflow-hidden' : 'opacity-100 h-auto'}`}
+                            >
+                                <div className="flex justify-center space-x-10 py-2">
                                     {navigationLinks.map((link) => (
                                         <Link
                                             key={link.name}
                                             href={link.href}
                                             onClick={(e) => handleSmoothScroll(e, link.href)}
-                                            className={`relative px-4 py-2 transition-colors font-normal hover:font-bold ${isHovered ? 'text-white' : 'text-black'} group`}
+                                            className={`relative px-2 py-2 transition-colors text-sm font-normal hover:font-bold ${isHovered ? 'text-white' : 'text-black'} group`}
                                         >
                                             {link.name}
                                             <span className="absolute bottom-0 left-0 w-full h-0.5 bg-red-600 scale-x-0 transition-transform duration-300 origin-left group-hover:scale-x-100"></span>
                                         </Link>
                                     ))}
-                                </div>
-
-                                <div className="flex items-center space-x-2">
-                                    <Button
-                                        variant="ghost"
-                                        size="icon"
-                                        className={`transition-all duration-300 rounded-none p-4 ${isHovered ? 'text-white' : 'text-black'} hover:bg-red-600 hover:text-white`}
-                                        aria-label="Buscar"
-                                    >
-                                        <MagnifyingGlassIcon className="w-5 h-5" />
-                                    </Button>
-                                    <Link
-                                        href="/login"
-                                        className={`transition-all duration-300 rounded-none p-4 ${isHovered ? 'text-white' : 'text-black'} hover:bg-red-600 hover:text-white`}
-                                        aria-label="Cuenta de usuario"
-                                    >
-                                        <UserIcon className="w-6 h-6" />
-                                    </Link>
-                                    <Button
-                                        variant="ghost"
-                                        size="icon"
-                                        className={`transition-all duration-300 rounded-none p-4 ${isHovered ? 'text-white' : 'text-black'} hover:bg-red-600 hover:text-white`}
-                                        aria-label="Carrito de compras"
-                                    >
-                                        <ShoppingCartIcon className="w-5 h-5" />
-                                    </Button>
                                 </div>
                             </div>
                         </div>

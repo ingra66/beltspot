@@ -15,11 +15,11 @@ export default function Login() {
     };
 
     return (
-        <div className="min-h-screen flex flex-col">
+        <div className="min-h-screen flex flex-col mt-[20px]">
             <Head title="Login" />
             <Header />
             
-            <main className="flex-grow flex items-center justify-center bg-white px-4 sm:px-6 lg:px-8" style={{ marginTop: '100px' }}>
+            <main className="flex-grow flex items-center justify-center bg-white px-4 sm:px-6 lg:px-8 mt-[120px]">
                 <div className="max-w-md w-full space-y-8 py-12">
                     <div>
                         <h1 className="text-3xl font-bold">
@@ -27,7 +27,7 @@ export default function Login() {
                         </h1>
                         <p className="mt-2 text-gray-600">
                             ¿No tienes una cuenta? {' '}
-                            <Link href={route('register')} className="text-black hover:underline">
+                            <Link href="/register" className="text-black hover:underline">
                                 Crear cuenta
                             </Link>
                         </p>

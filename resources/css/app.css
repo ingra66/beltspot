@@ -82,3 +82,11 @@
 .animate-blink {
     animation: blink 0.8s ease-in-out infinite;
 }
+
+@font-face {
+    font-family: 'Brush Hand';
+    src: url('/fonts/brush-hand.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}

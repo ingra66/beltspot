@@ -52,6 +52,20 @@ class ProductController extends Controller
         ]);
     }
 
+    public function gorros()
+    {
+        $products = Producto::with(['imagenes', 'categoria', 'subcategoria'])
+            ->whereHas('categoria', function($query) {
+                $query->where('nombre', 'Gorros');
+            })
+            ->where('ver_act', true)
+            ->get();
+        
+        return Inertia::render('Products/Gorros', [
+            'products' => $products
+        ]);
+    }
+
     public function getOffersProducts()
     {
         $products = Producto::with(['imagenes', 'categoria', 'subcategoria'])

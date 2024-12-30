@@ -1,46 +1,56 @@
-import GuestLayout from '@/Layouts/GuestLayout';
-import PrimaryButton from '@/Components/PrimaryButton';
 import { Head, Link, useForm } from '@inertiajs/react';
-import { FormEventHandler } from 'react';
+import Header from '@/Pages/Header';
+import Footer from '@/Pages/Footer';
 
 export default function VerifyEmail({ status }: { status?: string }) {
     const { post, processing } = useForm({});
 
-    const submit: FormEventHandler = (e) => {
-        e.preventDefault();
-
-        post(route('verification.send'));
-    };
-
     return (
-        <GuestLayout>
-            <Head title="Email Verification" />
+        <div className="min-h-screen flex flex-col mt-[20px]">
+            <Head title="Verificar Email" />
+            <Header />
+            
+            <main className="flex-grow flex items-center justify-center bg-white px-4 sm:px-6 lg:px-8 mt-[120px]">
+                <div className="max-w-md w-full space-y-8 py-12">
+                    <div>
+                        <h1 className="text-3xl font-bold">Verificar email</h1>
+                        <p className="mt-4 text-gray-600">
+                            Gracias por registrarte. Antes de comenzar, ¿podrías verificar tu dirección de correo electrónico 
+                            haciendo clic en el enlace que te acabamos de enviar? Si no recibiste el correo, con gusto te 
+                            enviaremos otro.
+                        </p>
+                    </div>
 
-            <div className="mb-4 text-sm text-gray-600">
-                Thanks for signing up! Before getting started, could you verify your email address by clicking on the
-                link we just emailed to you? If you didn't receive the email, we will gladly send you another.
-            </div>
+                    {status === 'verification-link-sent' && (
+                        <div className="bg-green-50 text-green-600 p-4 rounded-md">
+                            Se ha enviado un nuevo enlace de verificación a tu correo electrónico.
+                        </div>
+                    )}
 
-            {status === 'verification-link-sent' && (
-                <div className="mb-4 font-medium text-sm text-green-600">
-                    A new verification link has been sent to the email address you provided during registration.
+                    <div className="flex items-center justify-between mt-8">
+                        <button
+                            onClick={(e) => {
+                                e.preventDefault();
+                                post(route('verification.send'));
+                            }}
+                            disabled={processing}
+                            className="w-48 bg-black text-white py-3 hover:bg-gray-800 transition-colors"
+                        >
+                            REENVIAR EMAIL
+                        </button>
+
+                        <Link
+                            href={route('logout')}
+                            method="post"
+                            as="button"
+                            className="text-black hover:underline"
+                        >
+                            Cerrar sesión
+                        </Link>
+                    </div>
                 </div>
-            )}
-
-            <form onSubmit={submit}>
-                <div className="mt-4 flex items-center justify-between">
-                    <PrimaryButton disabled={processing}>Resend Verification Email</PrimaryButton>
-
-                    <Link
-                        href={route('logout')}
-                        method="post"
-                        as="button"
-                        className="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                    >
-                        Log Out
-                    </Link>
-                </div>
-            </form>
-        </GuestLayout>
+            </main>
+            <Footer />
+        </div>
     );
 }

@@ -1,51 +1,67 @@
-import GuestLayout from '@/Layouts/GuestLayout';
-import InputError from '@/Components/InputError';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
-import { Head, useForm } from '@inertiajs/react';
-import { FormEventHandler } from 'react';
+import { Head, useForm, Link } from '@inertiajs/react';
+import Header from '@/Pages/Header';
+import Footer from '@/Pages/Footer';
 
 export default function ForgotPassword({ status }: { status?: string }) {
     const { data, setData, post, processing, errors } = useForm({
         email: '',
     });
 
-    const submit: FormEventHandler = (e) => {
+    const submit = (e: React.FormEvent) => {
         e.preventDefault();
-
         post(route('password.email'));
     };
 
     return (
-        <GuestLayout>
-            <Head title="Forgot Password" />
+        <div className="min-h-screen flex flex-col mt-[20px]">
+            <Head title="Recuperar Contraseña" />
+            <Header />
+            
+            <main className="flex-grow flex items-center justify-center bg-white px-4 sm:px-6 lg:px-8 mt-[120px]">
+                <div className="max-w-md w-full space-y-8 py-12">
+                    <div>
+                        <h1 className="text-3xl font-bold">Recuperar contraseña</h1>
+                        <p className="mt-4 text-gray-600">
+                            Ingresa tu correo electrónico y te enviaremos un enlace para restablecer tu contraseña.
+                        </p>
+                    </div>
 
-            <div className="mb-4 text-sm text-gray-600">
-                Forgot your password? No problem. Just let us know your email address and we will email you a password
-                reset link that will allow you to choose a new one.
-            </div>
+                    {status && <div className="bg-green-50 text-green-600 p-4 rounded-md">{status}</div>}
 
-            {status && <div className="mb-4 font-medium text-sm text-green-600">{status}</div>}
+                    <form className="mt-8 space-y-6" onSubmit={submit}>
+                        <div className="space-y-4">
+                            <div>
+                                <input
+                                    type="email"
+                                    value={data.email}
+                                    onChange={e => setData('email', e.target.value)}
+                                    placeholder="Correo electrónico"
+                                    className="w-full px-3 py-3 border border-gray-300 focus:outline-none focus:border-black"
+                                />
+                                {errors.email && <div className="text-red-500 text-sm mt-1">{errors.email}</div>}
+                            </div>
 
-            <form onSubmit={submit}>
-                <TextInput
-                    id="email"
-                    type="email"
-                    name="email"
-                    value={data.email}
-                    className="mt-1 block w-full"
-                    isFocused={true}
-                    onChange={(e) => setData('email', e.target.value)}
-                />
+                            <div className="flex items-center justify-between">
+                                <button
+                                    type="submit"
+                                    disabled={processing}
+                                    className="w-40 bg-black text-white py-3 hover:bg-gray-800 transition-colors"
+                                >
+                                    ENVIAR ENLACE
+                                </button>
 
-                <InputError message={errors.email} className="mt-2" />
-
-                <div className="flex items-center justify-end mt-4">
-                    <PrimaryButton className="ms-4" disabled={processing}>
-                        Email Password Reset Link
-                    </PrimaryButton>
+                                <Link
+                                    href={route('login')}
+                                    className="text-black hover:underline"
+                                >
+                                    Volver al login
+                                </Link>
+                            </div>
+                        </div>
+                    </form>
                 </div>
-            </form>
-        </GuestLayout>
+            </main>
+            <Footer />
+        </div>
     );
 }

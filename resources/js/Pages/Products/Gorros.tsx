@@ -36,14 +36,14 @@ export default function Gorros({ products }: Props) {
             <Head title="Gorros - BeltSpot" />
             <Header />
 
-            <section className="relative h-[60vh]">
+            <section className="relative h-[60vh] mt-[120px]">
                 <div 
                     className="absolute inset-0 bg-cover bg-center" 
                     style={{ backgroundImage: `url(/images/caps-hero.jpg)` }}
                 >
                     <div className="absolute inset-0 bg-black/50" />
                 </div>
-                <div className="relative h-full flex flex-col items-center justify-center text-center pt-20 text-white">
+                <div className="relative h-full flex flex-col items-center justify-center text-center text-white">
                     <span className="text-sm tracking-wider mb-4">COLECCIÓN EXCLUSIVA</span>
                     <h1 className="text-4xl md:text-6xl font-bold max-w-4xl mb-8">
                         Gorras New Era

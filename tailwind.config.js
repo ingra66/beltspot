@@ -20,7 +20,8 @@ export default {
                 sans: [
                     'Figtree',
                     ...defaultTheme.fontFamily.sans
-                ]
+                ],
+                'brush-hand': ['Brush Hand', 'cursive'],
             },
             borderRadius: {
                 lg: 'var(--radius)',

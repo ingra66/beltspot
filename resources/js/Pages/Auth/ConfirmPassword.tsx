@@ -1,10 +1,7 @@
-import { useEffect, FormEventHandler } from 'react';
-import GuestLayout from '@/Layouts/GuestLayout';
-import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
-import { Head, useForm } from '@inertiajs/react';
+import { useEffect } from 'react';
+import { Head, useForm, Link } from '@inertiajs/react';
+import Header from '@/Pages/Header';
+import Footer from '@/Pages/Footer';
 
 export default function ConfirmPassword() {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -17,43 +14,60 @@ export default function ConfirmPassword() {
         };
     }, []);
 
-    const submit: FormEventHandler = (e) => {
+    const submit = (e: React.FormEvent) => {
         e.preventDefault();
-
         post(route('password.confirm'));
     };
 
     return (
-        <GuestLayout>
-            <Head title="Confirm Password" />
+        <div className="min-h-screen flex flex-col mt-[20px]">
+            <Head title="Confirmar Contraseña" />
+            <Header />
+            
+            <main className="flex-grow flex items-center justify-center bg-white px-4 sm:px-6 lg:px-8 mt-[120px]">
+                <div className="max-w-md w-full space-y-8 py-12">
+                    <div>
+                        <h1 className="text-3xl font-bold">Confirmar contraseña</h1>
+                        <p className="mt-4 text-gray-600">
+                            Esta es un área segura de la aplicación. Por favor, confirma tu contraseña antes de continuar.
+                        </p>
+                    </div>
 
-            <div className="mb-4 text-sm text-gray-600">
-                This is a secure area of the application. Please confirm your password before continuing.
-            </div>
+                    <form className="mt-8 space-y-6" onSubmit={submit}>
+                        <div className="space-y-4">
+                            <div>
+                                <input
+                                    type="password"
+                                    value={data.password}
+                                    onChange={e => setData('password', e.target.value)}
+                                    placeholder="Contraseña"
+                                    className="w-full px-3 py-3 border border-gray-300 focus:outline-none focus:border-black"
+                                    autoFocus
+                                />
+                                {errors.password && <div className="text-red-500 text-sm mt-1">{errors.password}</div>}
+                            </div>
 
-            <form onSubmit={submit}>
-                <div className="mt-4">
-                    <InputLabel htmlFor="password" value="Password" />
+                            <div className="flex items-center justify-between">
+                                <button
+                                    type="submit"
+                                    disabled={processing}
+                                    className="w-40 bg-black text-white py-3 hover:bg-gray-800 transition-colors"
+                                >
+                                    CONFIRMAR
+                                </button>
 
-                    <TextInput
-                        id="password"
-                        type="password"
-                        name="password"
-                        value={data.password}
-                        className="mt-1 block w-full"
-                        isFocused={true}
-                        onChange={(e) => setData('password', e.target.value)}
-                    />
-
-                    <InputError message={errors.password} className="mt-2" />
+                                <Link
+                                    href="/"
+                                    className="text-black hover:underline"
+                                >
+                                    Volver a la tienda
+                                </Link>
+                            </div>
+                        </div>
+                    </form>
                 </div>
-
-                <div className="flex items-center justify-end mt-4">
-                    <PrimaryButton className="ms-4" disabled={processing}>
-                        Confirm
-                    </PrimaryButton>
-                </div>
-            </form>
-        </GuestLayout>
+            </main>
+            <Footer />
+        </div>
     );
 }
