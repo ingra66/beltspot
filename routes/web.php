@@ -10,16 +10,16 @@ use Inertia\Inertia;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Admin\AdminProductController;
 use App\Http\Controllers\WelcomeController;
+use App\Http\Controllers\Auth\LoginController; // Importar controlador de login
 
 // Ruta principal
 Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
 
 // Rutas de autenticación para invitados
 Route::middleware('guest')->group(function () {
-    Route::get('login', function () {
-        return Inertia::render('Auth/Login');
-    })->name('login');
-
+    Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
+    Route::post('login', [LoginController::class, 'login']);
+    
     Route::get('register', function () {
         return Inertia::render('Auth/Register');
     })->name('register');
@@ -86,22 +86,18 @@ Route::middleware(['auth', 'admin'])->group(function () {
         ->name('admin.settings.update');
 
     // Ruta para eliminar imágenes de productos
-    Route::post(
-        'admin/products/{product}/remove-image/{image}',
-        [ProductController::class, 'removeImage']
-    )->name('admin.products.remove-image');
+    Route::post('admin/products/{product}/remove-image/{image}', [ProductController::class, 'removeImage'])
+        ->name('admin.products.remove-image');
 
     // Ruta de logout
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
         ->name('logout');
 
-    Route::post(
-        'admin/products/{product}/remove-image/{image}',
-        [ProductController::class, 'removeImage']
-    )
+    Route::post('admin/products/{product}/remove-image/{image}', [ProductController::class, 'removeImage'])
         ->name('admin.products.remove-image');
 });
 
 // Incluir rutas de autenticación adicionales
-require __DIR__ . '/auth.php';
+// require __DIR__ . '/auth.php';
+
 

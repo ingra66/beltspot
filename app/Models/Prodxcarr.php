@@ -2,32 +2,36 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class ProdXCarr extends Model
+class Prodxcarr extends Model
 {
+    use HasFactory;
+
     protected $table = 'prodxcarr';
 
     protected $fillable = [
         'id_prod',
         'id_carr',
         'cantidad',
-        'precio'
+        'precio',
     ];
 
-    protected $casts = [
-        'precio' => 'decimal:2'
-    ];
-
-    public function carrito(): BelongsTo
-    {
-        return $this->belongsTo(Carrito::class, 'id_carr');
-    }
-
-    public function producto(): BelongsTo
+    /**
+     * Relación con el modelo Producto.
+     */
+    public function producto()
     {
         return $this->belongsTo(Producto::class, 'id_prod');
+    }
+
+    /**
+     * Relación con el modelo Carrito.
+     */
+    public function carrito()
+    {
+        return $this->belongsTo(Carrito::class, 'id_carr');
     }
 }
 

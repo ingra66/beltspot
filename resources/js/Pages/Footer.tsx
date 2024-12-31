@@ -62,14 +62,14 @@ export default function Footer() {
                             <Link 
                                 href="https://facebook.com" 
                                 target="_blank"
-                                className="p-2 hover:bg-red-600/90 rounded-full transition-colors duration-300"
+                                className="p-2 hover:bg-red-600/90 transition-colors duration-300"
                             >
                                 <Facebook className="w-6 h-6" />
                             </Link>
                             <Link 
                                 href="https://instagram.com" 
                                 target="_blank"
-                                className="p-2 hover:bg-red-600/90 rounded-full transition-colors duration-300"
+                                className="p-2 hover:bg-red-600/90 transition-colors duration-300"
                             >
                                 <Instagram className="w-6 h-6" />
                             </Link>
@@ -85,7 +85,7 @@ export default function Footer() {
                 </div>
             </div>
 
-            <style jsx>{`
+            <style>{`
                 @keyframes spin-slow {
                     from {
                         transform: rotate(0deg);

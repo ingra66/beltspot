@@ -4,14 +4,13 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
-    use AuthenticatesUsers;
-
     protected $redirectTo = '/admin';
 
     public function __construct()
@@ -24,22 +23,51 @@ class LoginController extends Controller
         return Inertia::render('Auth/Login');
     }
 
-    protected function authenticated(Request $request, $user)
+    public function login(Request $request)
     {
-        if($user->is_admin) {
-            return redirect('/admin');
+        try {
+            $request->validate([
+                'email' => 'required|string|email',
+                'password' => 'required|string',
+            ], [
+                'email.required' => 'El correo electrónico es requerido.',
+                'email.email' => 'El correo electrónico debe ser válido.',
+                'password.required' => 'La contraseña es requerida.',
+            ]);
+
+            if (!Auth::attempt($request->only('email', 'password'))) {
+                \Log::info('Intento de login fallido para: ' . $request->email);
+                
+                return response()->json([
+                    'errors' => [
+                        'email' => ['Las credenciales ingresadas son incorrectas.']
+                    ]
+                ], 422);
+            }
+
+            $request->session()->regenerate();
+            \Log::info('Login exitoso para: ' . $request->email);
+
+            if (Auth::user()->is_admin) {
+                return redirect()->intended('/admin');
+            }
+
+            return redirect()->intended('/');
+        } catch (\Exception $e) {
+            \Log::error('Error inesperado: ' . $e->getMessage());
+            return response()->json([
+                'errors' => [
+                    'email' => ['Error al procesar la solicitud.']
+                ]
+            ], 500);
         }
-        return redirect('/');
     }
 
     public function logout(Request $request)
     {
-        $this->guard()->logout();
-
+        Auth::logout();
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
-
         return redirect('/');
     }
 }

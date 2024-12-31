@@ -13,7 +13,15 @@ export default function Register() {
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
-        post(route('register'));
+        post(route('register'), {
+            onError: (errors) => {
+                console.log('Errores recibidos:', errors); // Para debug
+                if (errors.password) {
+                    reset('password', 'password_confirmation');
+                }
+            },
+            preserveScroll: true
+        });
     };
 
     return (
@@ -43,7 +51,13 @@ export default function Register() {
                                     placeholder="Nombre completo"
                                     className="w-full px-3 py-3 border border-gray-300 focus:outline-none focus:border-black"
                                 />
-                                {errors.name && <div className="text-red-500 text-sm mt-1">{errors.name}</div>}
+                                {errors.name && (
+                                    <div className="text-red-500 text-sm mt-1">
+                                        {typeof errors.name === 'string' ? errors.name : 
+                                         Array.isArray(errors.name) ? errors.name[0] : 
+                                         'Error en el nombre'}
+                                    </div>
+                                )}
                             </div>
 
                             <div>
@@ -54,7 +68,13 @@ export default function Register() {
                                     placeholder="Correo electrónico"
                                     className="w-full px-3 py-3 border border-gray-300 focus:outline-none focus:border-black"
                                 />
-                                {errors.email && <div className="text-red-500 text-sm mt-1">{errors.email}</div>}
+                                {errors.email && (
+                                    <div className="text-red-500 text-sm mt-1">
+                                        {typeof errors.email === 'string' ? errors.email : 
+                                         Array.isArray(errors.email) ? errors.email[0] : 
+                                         'Error de correo electrónico'}
+                                    </div>
+                                )}
                             </div>
 
                             <div>
@@ -65,7 +85,13 @@ export default function Register() {
                                     placeholder="Contraseña"
                                     className="w-full px-3 py-3 border border-gray-300 focus:outline-none focus:border-black"
                                 />
-                                {errors.password && <div className="text-red-500 text-sm mt-1">{errors.password}</div>}
+                                {errors.password && (
+                                    <div className="text-red-500 text-sm mt-1">
+                                        {typeof errors.password === 'string' ? errors.password : 
+                                         Array.isArray(errors.password) ? errors.password[0] : 
+                                         'Error de contraseña'}
+                                    </div>
+                                )}
                             </div>
 
                             <div>
