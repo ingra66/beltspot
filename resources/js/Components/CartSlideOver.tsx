@@ -2,6 +2,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Trash2, Plus, Minus } from 'lucide-react';
 import { Button } from "@/shadcn/ui/button";
 import { useCart } from "@/Hooks/useCart";
+import { fadeIn, slideInRight } from '@/animations';
 
 interface CartItem {
     id: number;
@@ -30,22 +31,10 @@ export default function CartSlideOver({ isOpen, onClose }: CartSlideOverProps) {
             {isOpen && (
                 <>
                     {/* Overlay */}
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        className="fixed inset-0 bg-black/30 z-50"
-                        onClick={onClose}
-                    />
+                    <motion.div {...fadeIn} className="fixed inset-0 bg-black/30 z-50" onClick={onClose} />
 
                     {/* Cart panel */}
-                    <motion.div
-                        initial={{ x: '100%' }}
-                        animate={{ x: 0 }}
-                        exit={{ x: '100%' }}
-                        transition={{ type: "spring", damping: 20, stiffness: 100 }}
-                        className="fixed right-0 top-0 h-full w-full sm:w-[400px] bg-white z-50 shadow-xl"
-                    >
+                    <motion.div {...slideInRight} className="fixed right-0 top-0 h-full w-full sm:w-[400px] bg-white z-50 shadow-xl">
                         <div className="flex flex-col h-full">
                             {/* Header */}
                             <div className="flex justify-between items-center p-4 border-b">

@@ -11,6 +11,7 @@ import ProductModal from '@/Components/ProductModal';
 import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { router } from '@inertiajs/core';
+import { scrollReveal, hoverScale } from '@/animations';
 
 interface Product {
     id: number;

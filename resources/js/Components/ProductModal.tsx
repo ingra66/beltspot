@@ -4,6 +4,7 @@ import { Button } from "@/shadcn/ui/button";
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useCart } from '@/Hooks/useCart';
+import { fadeIn, slideInUp, scaleIn, hoverRotate, imageZoom } from '@/animations';
 
 interface Product {
     id: number;
@@ -61,14 +62,7 @@ export default function ProductModal({ isOpen, onClose, product }: ProductModalP
         <AnimatePresence>
             {isOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center">
-                    <motion.div 
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.3 }}
-                        className="absolute inset-0 bg-black/50" 
-                        onClick={onClose} 
-                    />
+                    <motion.div {...fadeIn} className="absolute inset-0 bg-black/50" onClick={onClose} />
                     <div className="relative w-[90%] md:w-auto overflow-hidden flex flex-col md:flex-row">
                         {/* Lado de la imagen */}
                         <motion.div 

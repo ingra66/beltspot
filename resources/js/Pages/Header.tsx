@@ -8,6 +8,7 @@ import ProductModal from '@/Components/ProductModal'
 import CartSlideOver from '@/Components/CartSlideOver'
 import { Helmet } from 'react-helmet-async'
 import { useCart } from "@/Hooks/useCart";
+import SearchOverlay from '@/Components/SearchOverlay';
 
 interface PageProps {
     auth: {
@@ -174,98 +175,7 @@ export default function Header() {
                 <meta name="theme-color" content="#000000" />
             </Helmet>
             <header className="fixed top-0 left-0 w-full z-50 transition-all duration-300">
-                {isSearchOpen ? (
-                    <div className="w-full bg-white border-b animate-slideDown origin-top">
-                        <div className="max-w-6xl mx-auto h-auto px-4">
-                            <div className="flex items-center justify-between h-16">
-                                <Link 
-                                    href="/" 
-                                    className="text-3xl font-blue-goblet opacity-0 animate-fadeIn"
-                                    style={{ 
-                                        letterSpacing: '2px',
-                                        animationDelay: '150ms',
-                                        animationFillMode: 'forwards'
-                                    }}
-                                >
-                                    beltspot
-                                </Link>
-                                
-                                <div className="flex-1 flex items-center mx-8 opacity-0 animate-fadeIn relative"
-                                    style={{ 
-                                        animationDelay: '300ms',
-                                        animationFillMode: 'forwards'
-                                    }}>
-                                    <input
-                                        type="text"
-                                        value={searchQuery}
-                                        onChange={(e) => setSearchQuery(e.target.value)}
-                                        placeholder="Buscar productos..."
-                                        className="w-full bg-transparent px-4 py-2 focus:outline-none text-black"
-                                        autoFocus
-                                    />
-                                    {searchQuery && (
-                                        <button
-                                            onClick={() => setSearchQuery('')}
-                                            className="absolute right-2 text-gray-400 hover:text-gray-600"
-                                        >
-                                            <X className="w-4 h-4" />
-                                        </button>
-                                    )}
-                                </div>
-
-                                <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    onClick={() => {
-                                        setIsSearchOpen(false)
-                                        setSearchQuery('')
-                                        setSearchResults([])
-                                    }}
-                                    className="w-12 h-12 rounded-full flex items-center justify-center opacity-0 animate-fadeIn"
-                                    style={{ 
-                                        animationDelay: '450ms',
-                                        animationFillMode: 'forwards'
-                                    }}
-                                >
-                                    <X className="w-5 h-5" />
-                                </Button>
-                            </div>
-
-                            {/* Resultados de búsqueda */}
-                            <div className="max-h-[70vh] overflow-y-auto">
-                                {searchResults.length > 0 ? (
-                                    <div className="py-4 border-t">
-                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                            {searchResults.map((product) => (
-                                                <div
-                                                    key={product.id}
-                                                    onClick={() => handleProductClick(product)}
-                                                    className="flex items-center space-x-4 p-3 hover:bg-gray-50 cursor-pointer rounded-lg transition-colors duration-200"
-                                                >
-                                                    <img
-                                                        src={product.imagenes[0]?.img}
-                                                        alt={product.nombre}
-                                                        className="w-16 h-16 object-cover rounded"
-                                                    />
-                                                    <div>
-                                                        <h3 className="font-medium text-sm">{product.nombre}</h3>
-                                                        <p className="text-sm text-gray-500">
-                                                            ${product.act_ofert ? product.precio_ofert : product.precio_reg}
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                ) : searchQuery.length > 0 && (
-                                    <div className="py-8 text-center text-gray-500">
-                                        No se encontraron resultados para "{searchQuery}"
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                ) : (
+                {!isSearchOpen && (
                     <>
                         {/* Banner superior */}
                         <div 
@@ -384,6 +294,20 @@ export default function Header() {
                         </nav>
                     </>
                 )}
+
+                {/* Componente de búsqueda */}
+                <SearchOverlay
+                    isOpen={isSearchOpen}
+                    onClose={() => {
+                        setIsSearchOpen(false);
+                        setSearchQuery('');
+                        setSearchResults([]);
+                    }}
+                    searchQuery={searchQuery}
+                    setSearchQuery={setSearchQuery}
+                    searchResults={searchResults}
+                    onProductClick={handleProductClick}
+                />
             </header>
 
             {/* Modal de producto */}
