@@ -7,17 +7,13 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { router } from '@inertiajs/react';
 import PageLoader from '@/Components/PageLoader';
 
-const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
-
-let root: any = null;
+const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
     resolve: (name) => resolvePageComponent(`./Pages/${name}.tsx`, import.meta.glob('./Pages/**/*.tsx')),
     setup({ el, App, props }) {
-        if (!root) {
-            root = createRoot(el);
-        }
+        const root = createRoot(el);
         root.render(<App {...props} />);
     },
     progress: {
@@ -25,29 +21,35 @@ createInertiaApp({
     },
 });
 
-// Para el loader, usar un enfoque diferente
-const loaderContainer = document.getElementById('page-loader') || (() => {
-    const el = document.createElement('div');
-    el.id = 'page-loader';
-    document.body.appendChild(el);
-    return el;
-})();
-
-let loaderRoot: any = null;
+// Elemento para el loader
+const loaderElement = document.createElement('div');
+loaderElement.id = 'page-loader';
+document.body.appendChild(loaderElement);
 
 const showLoader = () => {
-    if (!loaderRoot) {
-        loaderRoot = createRoot(loaderContainer);
+    const loader = document.getElementById('page-loader');
+    if (loader) {
+        const root = createRoot(loader);
+        root.render(<PageLoader />);
     }
-    loaderRoot.render(<PageLoader />);
 };
 
 const hideLoader = () => {
-    if (loaderRoot) {
-        loaderRoot.unmount();
-        loaderRoot = null;
+    const loader = document.getElementById('page-loader');
+    if (loader) {
+        loader.innerHTML = '';
     }
 };
 
-router.on('start', showLoader);
-router.on('finish', hideLoader);
+// Eventos del router
+router.on('start', () => {
+    showLoader();
+});
+
+router.on('finish', () => {
+    hideLoader();
+});
+
+router.on('error', (errors) => {
+    console.error('Inertia Error:', errors);
+});

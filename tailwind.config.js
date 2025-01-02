@@ -17,11 +17,8 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: [
-                    'Figtree',
-                    ...defaultTheme.fontFamily.sans
-                ],
-                'brush-hand': ['Brush Hand', 'cursive'],
+                sans: ['Lipa Agate High Nar Medium', ...defaultTheme.fontFamily.sans],
+                'blue-goblet': ['Blue Goblet Alternate One', 'cursive'],
             },
             borderRadius: {
                 lg: 'var(--radius)',

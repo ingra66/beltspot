@@ -1,9 +1,28 @@
+@font-face {
+    font-family: 'Blue Goblet Alternate One';
+    src: url('/fonts/BlueGobletAlternateOne.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Lipa Agate High Nar Medium';
+    src: url('/fonts/LipaAgateHighNarMedium.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
 @import 'admin-lte/dist/css/adminlte.min.css';
 @import '@fortawesome/fontawesome-free/css/all.min.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 @layer base {
+  html {
+    font-family: 'Lipa Agate High Nar Medium', sans-serif;
+  }
   :root {
     --background: 0 0% 100%;
     --foreground: 20 14.3% 4.1%;
@@ -81,12 +100,4 @@
 
 .animate-blink {
     animation: blink 0.8s ease-in-out infinite;
-}
-
-@font-face {
-    font-family: 'Brush Hand';
-    src: url('/fonts/brush-hand.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-    font-display: swap;
 }

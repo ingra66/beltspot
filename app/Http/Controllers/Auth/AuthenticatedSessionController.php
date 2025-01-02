@@ -28,13 +28,18 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request): RedirectResponse
+    public function store(LoginRequest $request): RedirectResponse|Response
     {
-        $request->authenticate();
+        try {
+            $request->authenticate();
+            $request->session()->regenerate();
 
-        $request->session()->regenerate();
-
-        return redirect()->intended(RouteServiceProvider::HOME);
+            return redirect()->intended(RouteServiceProvider::HOME);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return back()->withErrors([
+                'email' => $e->getMessage() ?: 'Las credenciales proporcionadas no coinciden con nuestros registros.',
+            ]);
+        }
     }
 
     /**

@@ -13,15 +13,7 @@ export default function Register() {
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
-        post(route('register'), {
-            onError: (errors) => {
-                console.log('Errores recibidos:', errors); // Para debug
-                if (errors.password) {
-                    reset('password', 'password_confirmation');
-                }
-            },
-            preserveScroll: true
-        });
+        post(route('register'));
     };
 
     return (
@@ -49,13 +41,11 @@ export default function Register() {
                                     value={data.name}
                                     onChange={e => setData('name', e.target.value)}
                                     placeholder="Nombre completo"
-                                    className="w-full px-3 py-3 border border-gray-300 focus:outline-none focus:border-black"
+                                    className={`w-full px-3 py-3 border ${errors.name ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:border-black`}
                                 />
                                 {errors.name && (
                                     <div className="text-red-500 text-sm mt-1">
-                                        {typeof errors.name === 'string' ? errors.name : 
-                                         Array.isArray(errors.name) ? errors.name[0] : 
-                                         'Error en el nombre'}
+                                        {Array.isArray(errors.name) ? errors.name[0] : errors.name}
                                     </div>
                                 )}
                             </div>
@@ -66,13 +56,11 @@ export default function Register() {
                                     value={data.email}
                                     onChange={e => setData('email', e.target.value)}
                                     placeholder="Correo electrónico"
-                                    className="w-full px-3 py-3 border border-gray-300 focus:outline-none focus:border-black"
+                                    className={`w-full px-3 py-3 border ${errors.email ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:border-black`}
                                 />
                                 {errors.email && (
                                     <div className="text-red-500 text-sm mt-1">
-                                        {typeof errors.email === 'string' ? errors.email : 
-                                         Array.isArray(errors.email) ? errors.email[0] : 
-                                         'Error de correo electrónico'}
+                                        {Array.isArray(errors.email) ? errors.email[0] : errors.email}
                                     </div>
                                 )}
                             </div>
@@ -83,13 +71,11 @@ export default function Register() {
                                     value={data.password}
                                     onChange={e => setData('password', e.target.value)}
                                     placeholder="Contraseña"
-                                    className="w-full px-3 py-3 border border-gray-300 focus:outline-none focus:border-black"
+                                    className={`w-full px-3 py-3 border ${errors.password ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:border-black`}
                                 />
                                 {errors.password && (
                                     <div className="text-red-500 text-sm mt-1">
-                                        {typeof errors.password === 'string' ? errors.password : 
-                                         Array.isArray(errors.password) ? errors.password[0] : 
-                                         'Error de contraseña'}
+                                        {Array.isArray(errors.password) ? errors.password[0] : errors.password}
                                     </div>
                                 )}
                             </div>
@@ -100,7 +86,7 @@ export default function Register() {
                                     value={data.password_confirmation}
                                     onChange={e => setData('password_confirmation', e.target.value)}
                                     placeholder="Confirmar contraseña"
-                                    className="w-full px-3 py-3 border border-gray-300 focus:outline-none focus:border-black"
+                                    className={`w-full px-3 py-3 border ${errors.password_confirmation ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:border-black`}
                                 />
                             </div>
 
