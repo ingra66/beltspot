@@ -3,6 +3,7 @@ import { X, ZoomIn, Plus, Minus } from 'lucide-react';
 import { Button } from "@/shadcn/ui/button";
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useCart } from '@/Hooks/useCart';
 
 interface Product {
     id: number;
@@ -34,26 +35,23 @@ interface ProductModalProps {
 }
 
 export default function ProductModal({ isOpen, onClose, product }: ProductModalProps) {
+    const { addToCart } = useCart();
     const [showFullImage, setShowFullImage] = useState(false);
     const [quantity, setQuantity] = useState(1);
     const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
     
     if (!isOpen) return null;
 
     const handleAddToCart = async () => {
         try {
+            setError(null);
             setIsLoading(true);
-            await axios.post('/api/cart/add', {
-                producto_id: product.id,
-                cantidad: quantity
-            });
-            
-            // Opcional: Mostrar notificación de éxito
-            alert('Producto agregado al carrito');
+            await addToCart(product, quantity);
             onClose();
-        } catch (error) {
+        } catch (error: any) {
+            setError('Error al agregar al carrito. Por favor, intenta de nuevo.');
             console.error('Error al agregar al carrito:', error);
-            alert('Error al agregar al carrito');
         } finally {
             setIsLoading(false);
         }
@@ -238,6 +236,12 @@ export default function ProductModal({ isOpen, onClose, product }: ProductModalP
                             </motion.div>
                         )}
                     </AnimatePresence>
+
+                    {error && (
+                        <div className="text-red-500 text-sm mt-2">
+                            {error}
+                        </div>
+                    )}
                 </div>
             )}
         </AnimatePresence>

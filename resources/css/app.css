@@ -1,3 +1,10 @@
+
+@import '@fortawesome/fontawesome-free/css/all.min.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 @font-face {
     font-family: 'Blue Goblet Alternate One';
     src: url('/fonts/BlueGobletAlternateOne.otf') format('opentype');
@@ -14,11 +21,6 @@
     font-display: swap;
 }
 
-@import 'admin-lte/dist/css/adminlte.min.css';
-@import '@fortawesome/fontawesome-free/css/all.min.css';
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 @layer base {
   html {
     font-family: 'Lipa Agate High Nar Medium', sans-serif;

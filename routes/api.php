@@ -38,7 +38,10 @@ Route::get('/search', function (Request $request) {
         ->get();
 });
 
-Route::get('/cart', [CarritoController::class, 'getCart']);
-Route::post('/cart/add', [CarritoController::class, 'addToCart']);
-Route::put('/cart/update-quantity', [CarritoController::class, 'updateQuantity']);
-Route::delete('/cart/remove-item', [CarritoController::class, 'removeItem']);
+// Rutas protegidas del carrito
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/cart', [CarritoController::class, 'getCart']);
+    Route::post('/cart/add', [CarritoController::class, 'addToCart']);
+    Route::put('/cart/update-quantity', [CarritoController::class, 'updateQuantity']);
+    Route::delete('/cart/remove-item', [CarritoController::class, 'removeItem']);
+});

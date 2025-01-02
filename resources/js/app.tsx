@@ -5,51 +5,53 @@ import { createRoot } from 'react-dom/client';
 import { createInertiaApp } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { router } from '@inertiajs/react';
+import { HelmetProvider } from 'react-helmet-async';
 import PageLoader from '@/Components/PageLoader';
+import { CartProvider } from '@/Contexts/CartContext';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
-createInertiaApp({
-    title: (title) => `${title} - ${appName}`,
-    resolve: (name) => resolvePageComponent(`./Pages/${name}.tsx`, import.meta.glob('./Pages/**/*.tsx')),
-    setup({ el, App, props }) {
-        const root = createRoot(el);
-        root.render(<App {...props} />);
-    },
-    progress: {
-        color: '#000',
-    },
-});
-
-// Elemento para el loader
+// Crear un elemento para el loader
 const loaderElement = document.createElement('div');
-loaderElement.id = 'page-loader';
+loaderElement.id = 'loader';
 document.body.appendChild(loaderElement);
 
-const showLoader = () => {
-    const loader = document.getElementById('page-loader');
-    if (loader) {
-        const root = createRoot(loader);
-        root.render(<PageLoader />);
+// Crear una única instancia de root para el loader
+const loaderRoot = createRoot(loaderElement);
+
+// Función para mostrar/ocultar el loader usando PageLoader
+const showLoader = (show: boolean) => {
+    if (show) {
+        loaderRoot.render(<PageLoader />);
+    } else {
+        loaderRoot.render(null);
     }
 };
 
-const hideLoader = () => {
-    const loader = document.getElementById('page-loader');
-    if (loader) {
-        loader.innerHTML = '';
-    }
-};
-
-// Eventos del router
-router.on('start', () => {
-    showLoader();
+createInertiaApp({
+    title: (title) => `${title} - ${appName}`,
+    resolve: (name) => {
+        const pages = import.meta.glob('./Pages/**/*.tsx', { eager: true })
+        return pages[`./Pages/${name}.tsx`]
+    },
+    setup({ el, App, props }) {
+        const root = createRoot(el);
+        root.render(
+            <HelmetProvider>
+                <CartProvider>
+                    <App {...props} />
+                </CartProvider>
+            </HelmetProvider>
+        );
+    },
+    progress: {
+        delay: 250,
+        color: '#29d',
+        includeCSS: true,
+        showSpinner: true,
+    },
 });
 
-router.on('finish', () => {
-    hideLoader();
-});
-
-router.on('error', (errors) => {
-    console.error('Inertia Error:', errors);
-});
+// Agregar eventos para mostrar/ocultar el loader
+document.addEventListener('inertia:start', () => showLoader(true));
+document.addEventListener('inertia:finish', () => showLoader(false));

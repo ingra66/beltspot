@@ -6,6 +6,8 @@ import { ShoppingCartIcon, SearchIcon, UserIcon, LogOutIcon, X } from 'lucide-re
 import { Button } from "@/shadcn/ui/button"
 import ProductModal from '@/Components/ProductModal'
 import CartSlideOver from '@/Components/CartSlideOver'
+import { Helmet } from 'react-helmet-async'
+import { useCart } from "@/Hooks/useCart";
 
 interface PageProps {
     auth: {
@@ -60,7 +62,7 @@ export default function Header() {
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [isCartOpen, setIsCartOpen] = useState(false)
-    const [cartItems, setCartItems] = useState<CartItem[]>([])
+    const { items } = useCart();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -167,6 +169,10 @@ export default function Header() {
 
     return (
         <>
+            <Helmet>
+                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                <meta name="theme-color" content="#000000" />
+            </Helmet>
             <header className="fixed top-0 left-0 w-full z-50 transition-all duration-300">
                 {isSearchOpen ? (
                     <div className="w-full bg-white border-b animate-slideDown origin-top">
@@ -314,15 +320,15 @@ export default function Header() {
                                             <Button
                                                 variant="ghost"
                                                 size="sm"
-                                                className={`transition-all duration-300 w-12 h-12 rounded-full flex items-center justify-center
+                                                className={`transition-all duration-300 w-12 h-12 rounded-full flex items-center justify-center relative
                                                     ${isHovered ? 'text-white hover:bg-red-600' : 'text-black hover:bg-red-600 hover:text-white'}`}
                                                 onClick={() => setIsCartOpen(true)}
                                                 aria-label="Carrito de compras"
                                             >
                                                 <ShoppingCartIcon className="w-6 h-6" />
-                                                {cartItems.length > 0 && (
+                                                {items.length > 0 && (
                                                     <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
-                                                        {cartItems.length}
+                                                        {items.length}
                                                     </span>
                                                 )}
                                             </Button>
@@ -395,12 +401,9 @@ export default function Header() {
             <CartSlideOver
                 isOpen={isCartOpen}
                 onClose={() => setIsCartOpen(false)}
-                items={cartItems}
-                onUpdateQuantity={handleUpdateQuantity}
-                onRemoveItem={handleRemoveItem}
             />
 
-            <style jsx>{`
+            <style>{`
                 @keyframes fadeIn {
                     from {
                         opacity: 0;

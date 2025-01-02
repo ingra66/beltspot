@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Trash2, Plus, Minus } from 'lucide-react';
 import { Button } from "@/shadcn/ui/button";
+import { useCart } from "@/Hooks/useCart";
 
 interface CartItem {
     id: number;
@@ -13,13 +14,16 @@ interface CartItem {
 interface CartSlideOverProps {
     isOpen: boolean;
     onClose: () => void;
-    items: CartItem[];
-    onUpdateQuantity: (id: number, quantity: number) => void;
-    onRemoveItem: (id: number) => void;
 }
 
-export default function CartSlideOver({ isOpen, onClose, items, onUpdateQuantity, onRemoveItem }: CartSlideOverProps) {
+export default function CartSlideOver({ isOpen, onClose }: CartSlideOverProps) {
+    const { items, updateQuantity, removeItem } = useCart();
     const total = items.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
+
+    const handleUpdateQuantity = (itemId: number, newQuantity: number) => {
+        if (newQuantity < 1) return;
+        updateQuantity(itemId, newQuantity);
+    };
 
     return (
         <AnimatePresence>
@@ -70,7 +74,7 @@ export default function CartSlideOver({ isOpen, onClose, items, onUpdateQuantity
                                                 <p className="text-gray-600">${item.precio}</p>
                                                 <div className="flex items-center space-x-2 mt-2">
                                                     <button 
-                                                        onClick={() => onUpdateQuantity(item.id, item.cantidad - 1)}
+                                                        onClick={() => handleUpdateQuantity(item.id, item.cantidad - 1)}
                                                         className="p-1 hover:bg-gray-100 rounded"
                                                         disabled={item.cantidad <= 1}
                                                     >
@@ -78,7 +82,7 @@ export default function CartSlideOver({ isOpen, onClose, items, onUpdateQuantity
                                                     </button>
                                                     <span>{item.cantidad}</span>
                                                     <button 
-                                                        onClick={() => onUpdateQuantity(item.id, item.cantidad + 1)}
+                                                        onClick={() => handleUpdateQuantity(item.id, item.cantidad + 1)}
                                                         className="p-1 hover:bg-gray-100 rounded"
                                                     >
                                                         <Plus className="w-4 h-4" />
@@ -86,7 +90,7 @@ export default function CartSlideOver({ isOpen, onClose, items, onUpdateQuantity
                                                 </div>
                                             </div>
                                             <button 
-                                                onClick={() => onRemoveItem(item.id)}
+                                                onClick={() => removeItem(item.id)}
                                                 className="p-2 hover:bg-gray-100 rounded"
                                             >
                                                 <Trash2 className="w-5 h-5 text-red-500" />

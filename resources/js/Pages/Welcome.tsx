@@ -9,6 +9,8 @@ import { Link } from '@inertiajs/react';
 import PageLoader from '@/Components/PageLoader';
 import ProductModal from '@/Components/ProductModal';
 import { useState } from 'react';
+import { Helmet } from 'react-helmet-async';
+import { router } from '@inertiajs/core';
 
 interface Product {
     id: number;
@@ -46,19 +48,19 @@ export default function Welcome({ offerProducts }: Props) {
             title: "CINTOS",
             image: "images/cinturones.webp?height=600&width=400",
             background: "bg-black",
-            link: "/pages/products/Cinturones"
+            link: '/cinturones'
         },
         {
             title: "CADENAS",
             image: "images/cadenas.webp?height=600&width=400",
             background: "bg-black",
-            link: "/pages/products/Cadenas"
+            link: '/cadenas'
         },
         {
             title: "GORROS",
             image: "images/gorros.jpg?height=600&width=400",
             background: "bg-black",
-            link: "/pages/products/Gorros"
+            link: '/gorros'
         }
     ]
 
@@ -69,6 +71,15 @@ export default function Welcome({ offerProducts }: Props) {
 
     return (
         <div className="min-h-screen bg-white text-black">
+            <Helmet>
+                <title>Beltspot - Tienda de Cinturones y Accesorios</title>
+                <meta name="description" content="Descubre nuestra colección exclusiva de cinturones BB Simon, cadenas y accesorios de lujo." />
+                <meta name="keywords" content="cinturones, BB Simon, cadenas, gorros, accesorios, lujo, moda" />
+                <meta property="og:title" content="Beltspot - Tienda de Cinturones y Accesorios" />
+                <meta property="og:type" content="website" />
+                <meta property="og:url" content={window.location.href} />
+            </Helmet>
+            
             <Header />
 
             {/* Hero Section */}
@@ -116,8 +127,6 @@ export default function Welcome({ offerProducts }: Props) {
                         key={index}
                         href={product.link}
                         className="block group relative overflow-hidden transform transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl"
-                        preserveState={false}
-                        preserveScroll={false}
                     >
                         <div className={`relative aspect-[4/5] overflow-hidden ${product.background}`}>
                             <img
@@ -229,7 +238,7 @@ export default function Welcome({ offerProducts }: Props) {
 
             <Footer />
 
-            <style jsx>{`
+            <style>{`
                 @keyframes sparkle {
                     0%, 100% { opacity: 0.8; }
                     50% { opacity: 0.4; }
