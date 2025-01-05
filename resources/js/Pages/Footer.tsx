@@ -1,7 +1,7 @@
 import { Link } from '@inertiajs/react'
 import { Instagram, Facebook } from 'lucide-react'
-import { Button } from "@/shadcn/ui/button"
 import { Helmet } from 'react-helmet-async'
+import { motion } from 'framer-motion'
 
 export default function Footer() {
     return (
@@ -18,10 +18,10 @@ export default function Footer() {
                         <ul className="space-y-3">
                             <li><Link href="/" className="hover:underline text-sm">INICIO</Link></li>
                             <li><Link href="/#brand-description" className="hover:underline text-sm">SOBRE NOSOTROS</Link></li>
-                            <li><Link href={route('products.cinturones')} className="hover:underline text-sm">CINTURONES</Link></li>
-                            <li><Link href={route('products.cadenas')} className="hover:underline text-sm">CADENAS</Link></li>
-                            <li><Link href={route('products.gorros')} className="hover:underline text-sm">GORROS</Link></li>
-                            <li><Link href={route('products.otros')} className="hover:underline text-sm">OTROS</Link></li>
+                            <li><Link href="/productos/cinturones" className="hover:underline text-sm">CINTURONES</Link></li>
+                            <li><Link href="/productos/cadenas" className="hover:underline text-sm">CADENAS</Link></li>
+                            <li><Link href="/productos/gorros" className="hover:underline text-sm">GORROS</Link></li>
+                            <li><Link href="/productos/otros" className="hover:underline text-sm">OTROS</Link></li>
                         </ul>
                     </div>
 
@@ -65,20 +65,32 @@ export default function Footer() {
                                 Solicita tu membresía gratuita para recibir ofertas exclusivas, noticias y eventos.
                             </p>
                             <div className="flex items-center space-x-4 mt-4">
-                                <Link 
-                                    href="https://facebook.com" 
-                                    target="_blank"
-                                    className="p-2 hover:bg-red-600/90 rounded-full transition-colors duration-300"
+                                <motion.div
+                                    whileHover={{ scale: 1.1 }}
+                                    transition={{ type: "spring", stiffness: 400, damping: 10 }}
                                 >
-                                    <Facebook className="w-6 h-6" />
-                                </Link>
-                                <Link 
-                                    href="https://instagram.com" 
-                                    target="_blank"
-                                    className="p-2 hover:bg-red-600/90 rounded-full transition-colors duration-300"
+                                    <Link 
+                                        href="https://facebook.com" 
+                                        target="_blank"
+                                        className="p-2 hover:bg-red-600/90 rounded-full transition-colors duration-300"
+                                    >
+                                        <Facebook className="w-6 h-6" />
+                                    </Link>
+                                </motion.div>
+                                
+                                <motion.div
+                                    whileHover={{ scale: 1.1 }}
+                                    transition={{ type: "spring", stiffness: 400, damping: 10 }}
                                 >
-                                    <Instagram className="w-6 h-6" />
-                                </Link>
+                                    <Link 
+                                        href="https://instagram.com" 
+                                        target="_blank"
+                                        className="p-2 hover:bg-red-600/90 rounded-full transition-colors duration-300"
+                                    >
+                                        <Instagram className="w-6 h-6" />
+                                    </Link>
+                                </motion.div>
+
                                 <Link href="/" className="ml-4">
                                     <img 
                                         src="/images/logo.png" 
@@ -102,6 +114,7 @@ export default function Footer() {
                     }
                     .animate-spin-slow {
                         animation: spin-slow 8s linear infinite;
+                        transform-origin: center center;
                     }
                 `}</style>
             </footer>

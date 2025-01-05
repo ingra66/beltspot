@@ -47,10 +47,22 @@ interface Product {
 const navigationLinks = [
     { name: 'INICIO', href: '/' },
     { name: 'SOBRE NOSOTROS', href: '/#brand-description' },
-    { name: 'CINTURONES', href: route('products.cinturones') },
-    { name: 'CADENAS', href: route('products.cadenas') },
-    { name: 'GORROS', href: route('products.gorros') },
-    { name: 'OTROS', href: route('products.otros') }
+    { 
+        name: 'CINTURONES', 
+        href: '/productos/cinturones'
+    },
+    { 
+        name: 'CADENAS', 
+        href: '/productos/cadenas'
+    },
+    { 
+        name: 'GORROS', 
+        href: '/productos/gorros'
+    },
+    { 
+        name: 'OTROS', 
+        href: '/productos/otros'
+    }
 ]
 
 export default function Header() {

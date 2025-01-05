@@ -4,79 +4,44 @@ namespace App\Http\Controllers;
 
 use App\Models\Producto;
 use App\Models\Categoria;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class ProductController extends Controller
 {
-    public function cinturones()
+    public function show($category)
     {
-        $products = Producto::with(['imagenes', 'categoria', 'subcategoria'])
-            ->whereHas('categoria', function($query) {
-                $query->where('nombre', 'Cinturones');
-            })
-            ->where('ver_act', true)
-            ->get();
+        $categoryConfig = config("categories.{$category}");
         
-        return Inertia::render('Products/Cinturones', [
-            'products' => $products
+        if (!$categoryConfig) {
+            abort(404);
+        }
+
+        if ($category === 'otros') {
+            // Obtener IDs de las categorías principales que queremos excluir
+            $excludeCategoryIds = Categoria::whereIn('nombre', ['Cinturones', 'Cadenas', 'Gorros'])
+                ->pluck('id');
+
+            // Obtener productos que NO estén en esas categorías
+            $products = Producto::whereNotIn('categoria', $excludeCategoryIds)
+                ->where('ver_act', true)
+                ->with(['imagenes'])
+                ->get();
+        } else {
+            // Lógica original para las demás categorías
+            $categoriaId = Categoria::where('nombre', 'like', '%' . ucfirst($category) . '%')
+                ->first()
+                ->id;
+
+            $products = Producto::where('categoria', $categoriaId)
+                ->where('ver_act', true)
+                ->with(['imagenes'])
+                ->get();
+        }
+
+        return Inertia::render('Products/ProductPage', [
+            'products' => $products,
+            'category' => $categoryConfig
         ]);
     }
-
-    public function cadenas()
-    {
-        $products = Producto::with(['imagenes', 'categoria', 'subcategoria'])
-            ->whereHas('categoria', function($query) {
-                $query->where('nombre', 'Cadenas');
-            })
-            ->where('ver_act', true)
-            ->get();
-        
-        return Inertia::render('Products/Cadenas', [
-            'products' => $products
-        ]);
-    }
-
-    public function otros()
-    {
-        $products = Producto::with(['imagenes', 'categoria', 'subcategoria'])
-            ->whereHas('categoria', function($query) {
-                $query->whereNotIn('nombre', ['Cinturones', 'Cadenas', 'Gorros'])
-                    ->where('ver_act', true);
-            })
-            ->where('ver_act', true)
-            ->orderBy('created_at', 'desc')
-            ->get();
-        
-        return Inertia::render('Products/Otros', [
-            'products' => $products
-        ]);
-    }
-
-    public function gorros()
-    {
-        $products = Producto::with(['imagenes', 'categoria', 'subcategoria'])
-            ->whereHas('categoria', function($query) {
-                $query->where('nombre', 'Gorros');
-            })
-            ->where('ver_act', true)
-            ->get();
-        
-        return Inertia::render('Products/Gorros', [
-            'products' => $products
-        ]);
-    }
-
-    public function getOffersProducts()
-    {
-        $products = Producto::with(['imagenes', 'categoria', 'subcategoria'])
-            ->where('ver_act', true)
-            ->where('act_ofert', true)
-            ->whereNotNull('precio_ofert')
-            ->orderBy('created_at', 'desc')
-            ->get();
-        
-        return $products;
-    }
-
-    // Métodos similares para gorros y otros...
 } 

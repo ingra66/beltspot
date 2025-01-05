@@ -7,19 +7,19 @@ export default function ProductShowcase() {
             title: "CINTOS",
             image: "images/cinturones.webp?height=600&width=400",
             background: "bg-black",
-            link: '/cinturones'
+            href: '/productos/cinturones'
         },
         {
             title: "CADENAS",
             image: "images/cadenas.webp?height=600&width=400",
             background: "bg-black",
-            link: '/cadenas'
+            href: '/productos/cadenas'
         },
         {
             title: "GORROS",
             image: "images/gorros.jpg?height=600&width=400",
             background: "bg-black",
-            link: '/gorros'
+            href: '/productos/gorros'
         }
     ];
 
@@ -28,7 +28,7 @@ export default function ProductShowcase() {
             {products.map((product, index) => (
                 <Link
                     key={index}
-                    href={product.link}
+                    href={product.href}
                     className="block group relative overflow-hidden transform transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl"
                 >
                     <div className={`relative aspect-[4/5] overflow-hidden ${product.background}`}>

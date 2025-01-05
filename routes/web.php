@@ -30,17 +30,9 @@ Route::middleware('guest')->group(function () {
 });
 
 // Rutas de productos públicas
-Route::get('/cinturones', [ProductController::class, 'cinturones'])
-    ->name('products.cinturones');
-
-Route::get('/cadenas', [ProductController::class, 'cadenas'])
-    ->name('products.cadenas');
-
-Route::get('/gorros', [ProductController::class, 'gorros'])
-    ->name('products.gorros');
-
-Route::get('/otros', [ProductController::class, 'otros'])
-    ->name('products.otros');
+Route::get('/productos/{category}', [ProductController::class, 'show'])
+    ->where('category', 'cinturones|cadenas|gorros|otros')
+    ->name('products.show');
 
 // Rutas de administración
 Route::middleware(['auth', 'admin'])->group(function () {

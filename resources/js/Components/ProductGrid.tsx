@@ -30,6 +30,8 @@ interface ProductGridProps {
 }
 
 export default function ProductGrid({ products }: ProductGridProps) {
+    console.log('ProductGrid received products:', products); // Para debugging
+    
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
@@ -51,6 +53,7 @@ export default function ProductGrid({ products }: ProductGridProps) {
                         key={product.id}
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
+                        whileHover={{ y: -10 }}
                         transition={{ duration: 0.5, delay: index * 0.1 }}
                         className="group relative"
                     >
@@ -58,50 +61,46 @@ export default function ProductGrid({ products }: ProductGridProps) {
                             <img
                                 src={product.imagenes[0]?.img || '/placeholder.jpg'}
                                 alt={product.nombre}
-                                className="w-full aspect-square object-cover transition-transform duration-300 group-hover:scale-105"
+                                className="w-full aspect-square object-cover transition-transform duration-300 group-hover:scale-110"
                             />
                             
-                            {/* Overlay con botón - solo en la parte inferior */}
-                            <div className="absolute bottom-0 left-0 right-0">
-                                <div className="transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                                    <button 
-                                        onClick={() => handleOpenModal(product)}
-                                        className="w-full bg-gray-100/80 backdrop-blur-sm py-3 text-[10px] md:text-xs text-gray-800 font-medium tracking-wider cursor-pointer hover:bg-gray-200/80 transition-colors"
-                                    >
-                                        MOSTRAR MÁS OPCIONES
-                                    </button>
-                                </div>
+                            {/* Overlay con botón */}
+                            <div className="absolute inset-x-0 bottom-0 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                                <button 
+                                    onClick={() => handleOpenModal(product)}
+                                    className="w-full py-4 bg-black/70 backdrop-blur-sm text-white hover:bg-black/80 transition-all duration-300"
+                                >
+                                    MOSTRAR MÁS OPCIONES
+                                </button>
                             </div>
 
                             {/* Etiqueta de oferta */}
                             {product.act_ofert && product.precio_ofert && (
-                                <motion.div 
-                                    initial={{ x: 50 }}
-                                    animate={{ x: 0 }}
+                                <div 
                                     className="absolute -right-2 top-4 bg-red-600 text-white px-4 py-2 text-sm font-bold z-20"
                                     style={{
                                         clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%, 10% 50%)'
                                     }}
                                 >
-                                    OFERTA
-                                </motion.div>
+                                    {Math.round(((product.precio_reg - product.precio_ofert) / product.precio_reg) * 100)}% OFF
+                                </div>
                             )}
                         </div>
 
-                        <div className="space-y-1 px-2 mt-3">
-                            <h3 className="font-medium truncate">{product.nombre}</h3>
-                            <div className="flex flex-col">
+                        <div className="mt-4 px-2">
+                            <h3 className="text-lg font-medium truncate">{product.nombre}</h3>
+                            <div className="flex items-center gap-2">
                                 {product.act_ofert && product.precio_ofert ? (
                                     <>
-                                        <span className="text-red-500 text-lg font-medium">
+                                        <span className="text-red-600 font-semibold text-lg">
                                             ${product.precio_ofert}
                                         </span>
-                                        <span className="text-gray-500 text-sm line-through">
+                                        <span className="text-gray-500 line-through text-sm">
                                             ${product.precio_reg}
                                         </span>
                                     </>
                                 ) : (
-                                    <span className="text-gray-600 text-lg">
+                                    <span className="text-gray-600 text-lg font-semibold">
                                         ${product.precio_reg}
                                     </span>
                                 )}
